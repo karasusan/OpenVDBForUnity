@@ -1,0 +1,5 @@
+{
+	"dependencies": {
+		"com.unity.render-pipelines.high-definition" : "1.1.4-preview"
+    }
+}
