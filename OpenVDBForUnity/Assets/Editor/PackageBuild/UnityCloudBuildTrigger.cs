@@ -2,7 +2,7 @@
 
 namespace Assets.Editor.PackageBuild
 {
-    static class UnityCloudBuildTrigger
+    public static class UnityCloudBuildTrigger
     {
         public static void PostExport(string exportPath)
         {
