@@ -631,12 +631,13 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 1
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 
-  projectName: Template_HD
-  organizationId: 
+  cloudProjectId: 6beb181e-3c38-4d49-89dc-4c5624c75c5c
+  projectName: OpenVDBForUnity
+  organizationId: karasusan
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
