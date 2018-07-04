@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEditor;
 
-namespace Assets.Editor.PackageBuild
+namespace OpenVDB
 {
     class PackageBuildInfo
     {
@@ -27,7 +27,7 @@ namespace Assets.Editor.PackageBuild
             var succeed = File.Exists(exportPath);
             long fileSize = 0;
 
-            if(succeed)
+            if (succeed)
             {
                 var info = new FileInfo(exportPath);
                 fileSize = info.Length;
