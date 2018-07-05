@@ -12,7 +12,8 @@ class DefaultNameConan(ConanFile):
         # Fix me
         # This problem relate OpenVDB linker settings. 
         # TBB.shared is True when it is default.
-        self.options["TBB"].shared = [False]
+        if self.options["TBB"].shared:
+            self.options["TBB"].shared = False
 
     def build(self):
         cmake = CMake(self)
