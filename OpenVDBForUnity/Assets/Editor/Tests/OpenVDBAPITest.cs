@@ -1,17 +1,16 @@
-﻿using UnityEngine;
-using UnityEngine.TestTools;
+﻿using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 
 namespace OpenVDB
 {
-    public class NewTestScript
+    public class OpenVDBAPITest
     {
 
         [Test]
-        public void NewTestScriptSimplePasses()
+        public void InitializeSimplePasses()
         {
-            // Use the Assert class to test conditions.
+            OpenVDBAPI.oiInitialize();
         }
 
         // A UnityTest behaves like a coroutine in PlayMode

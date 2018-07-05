@@ -27,10 +27,18 @@ class OpenVDBForUnityConan(ConanFile):
         if self.options.shared and "fPIC" in self.options.fields:
             self.options.fPIC = True
 
+    def source(self):
+        self.run("git clone https://github.com/karasusan/OpenVDBForUnity src")
+        # self.run("cd src && git checkout v%s" % self.version)
+
     def build(self):
         cmake = CMake(self)
-        cmake.configure(source_dir="../Plugin")
+        cmake.verbose = True
+        cmake.configure(source_dir="src/Plugin")
         cmake.build()
 
     def package(self):
-        self.copy("LICENSE", src=".", dst="license")
+        self.copy("LICENSE", dst="license", src="src")
+        self.copy("*", dst="lib", src="lib")
+        self.copy("openvdbi.h", dst="include", src="src/Plugin/openvdbi")
+        self.copy("OpenVDBImporter.h", dst="include/Importer", src="src/Plugin/openvdbi/Importer")
