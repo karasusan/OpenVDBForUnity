@@ -1,0 +1,46 @@
+
+env:
+   global:
+     - CONAN_REFERENCE: "OpenVDBForUnity/0.0.1"
+     - CONAN_USERNAME: "kazuki"
+     - CONAN_LOGIN_USERNAME: "kazuki"
+     - CONAN_CHANNEL: "development"
+     - CONAN_UPLOAD: "https://api.bintray.com/conan/kazuki/conan"
+
+linux: &linux
+   os: linux
+   sudo: required
+   language: python
+   python: "3.6"
+   services:
+     - docker
+osx: &osx
+   os: osx
+   language: generic
+matrix:
+   include:
+
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=4.9 CONAN_DOCKER_IMAGE=lasote/conangcc49 CONAN_GCC_VERSIONS CONAN_BUILD_TYPES=Release
+
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=6 CONAN_DOCKER_IMAGE=lasote/conangcc6 CONAN_BUILD_TYPES=Release
+
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=lasote/conangcc7 CONAN_BUILD_TYPES=Release
+
+      - <<: *osx
+        osx_image: xcode9
+        env: CONAN_APPLE_CLANG_VERSIONS=9.0
+install:
+  - chmod +x .travis/install.sh
+  - ./.travis/install.sh
+
+script:
+  - chmod +x .travis/run.sh
+  - ./.travis/run.sh
+
+notifications:
+  email: false
+  slack:
+    secure: "E00A0qUTR7dCb0y/5nTD2U1Tz2hBmflcHzPRr3/xIFGWdYIc8ggF+36HvrRCk+5Voue/WClW9c4C+djDp750P61KdeVUVvsI0DGYQ/+lsLcJkwtk9i3YCCg2mZrl1gaDv1U2LUMjRHq8CI7eW1iMAmWOTyD5J4vlYxcRVOH+7YjYDz88eJ0P3AUuUSKnT3RdJzborI3B6nCFxt6DPTCUlMSn0BZ11pso0QkXh9TzdPco6hr8QzfI86x5LbfSO9Wwl/HF92l03CWZSZsnWjv9jbAbFl61EJURdZoMBDB3h/4SLWw8ztXMed6PRgAYVTKN8jb4wwJNJI5t+EG4JHH3jqmvsylBV8EnD5+VzEVEYhkGAfVeGrZiGMDi7L/Dru6cFDQ2SluGJ5vVyzmVmweG8vg63QfXJKZAiV9ppvneCSPMZqTXE1EUOtv9+suOj8YQLZWT2HfqTd8/JUWg4D4RzxTE9FLKpPX546UO4Y5Vp28oQEvRrv7hqaEurSnJs6Egwspxm5+7P3B+VZ7MQPmH2NzYTVX1ZnbByGPh7sgEEhpgiIOZ3FwpgeXrS27oX/3XMRdfl4D/hmfJpoO6oE5CPvrbHn1g19mGUxJg4qKuIa4xQV3vlWhd+9DA5qqniX8BCQ5c+MOm5JqR5QMMopCDch9YQxaFvIiptXrpdm4Dpss="
