@@ -1,13 +1,10 @@
 * text=auto -whitespace
-
 # for csharp source files, whitespace=tab-in-indent,trailing-space,tabwidth=4 is recommended
 # however it would result in too many warnings right now
 *.cs  text eol=auto diff=csharp
 *.sh  text eol=lf
 *.ps1 text eol=crlf
 *.bat text eol=crlf
-
-
 # unity assets
 *.mat               text eol=auto merge=unityyamlmerge
 *.anim              text eol=auto merge=unityyamlmerge
@@ -20,7 +17,6 @@
 *.controller        text eol=auto merge=unityyamlmerge
 *.playable          text eol=auto merge=unityyamlmerge
 *.shader            text eol=auto merge=unityyamlmerge
-
 # plugins
 *.h                 text eol=auto diff=cpp
 *.m                 text eol=auto diff=objc
@@ -31,17 +27,13 @@
 *.dylib             binary filter=lfs diff=lfs merge=lfs
 *.jar               binary filter=lfs diff=lfs merge=lfs
 *.so                binary filter=lfs diff=lfs merge=lfs
-
-
 # miscellaneous assets
 *.xml               text eol=auto
 *.jslib             text eol=auto
-
 # binary files
 # + unity
 LightingData.asset binary filter=lfs diff=lfs merge=lfs
 NavMesh-*.asset    binary filter=lfs diff=lfs merge=lfs
-
 # + image
 *.jpg     binary filter=lfs diff=lfs merge=lfs
 *.jpeg    binary filter=lfs diff=lfs merge=lfs
@@ -50,7 +42,6 @@ NavMesh-*.asset    binary filter=lfs diff=lfs merge=lfs
 *.tga     binary filter=lfs diff=lfs merge=lfs
 *.exr     binary filter=lfs diff=lfs merge=lfs
 *.psd     binary filter=lfs diff=lfs merge=lfs
-
 # + audio
 *.mp3     binary filter=lfs diff=lfs merge=lfs
 *.wav     binary filter=lfs diff=lfs merge=lfs
@@ -58,16 +49,13 @@ NavMesh-*.asset    binary filter=lfs diff=lfs merge=lfs
 *.acb     binary filter=lfs diff=lfs merge=lfs
 *.acf     binary filter=lfs diff=lfs merge=lfs
 *.awb     binary filter=lfs diff=lfs merge=lfs
-
 # + video
 *.mp4     binary filter=lfs diff=lfs merge=lfs
 *.mov     binary filter=lfs diff=lfs merge=lfs
-
 # + 3d
 *.obj     binary filter=lfs diff=lfs merge=lfs
 *.fbx     binary filter=lfs diff=lfs merge=lfs
 *.FBX     binary filter=lfs diff=lfs merge=lfs
-
 # + other
 *.ttf     binary filter=lfs diff=lfs merge=lfs
 *.otf     binary filter=lfs diff=lfs merge=lfs
@@ -76,3 +64,4 @@ NavMesh-*.asset    binary filter=lfs diff=lfs merge=lfs
 *.pdf     binary filter=lfs diff=lfs merge=lfs
 *.md      text    eol=auto
 *.txt     text    eol=auto
+*.vdb filter=lfs diff=lfs merge=lfs -text
