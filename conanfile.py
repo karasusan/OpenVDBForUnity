@@ -33,7 +33,6 @@ class OpenVDBForUnityConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        cmake.verbose = True
         cmake.configure(source_dir="src/Plugin")
         cmake.build()
 
