@@ -24,6 +24,9 @@ matrix:
         env: CONAN_GCC_VERSIONS=4.9 CONAN_DOCKER_IMAGE=lasote/conangcc49 CONAN_GCC_VERSIONS CONAN_BUILD_TYPES=Release
 
       - <<: *linux
+        env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=lasote/conangcc5 CONAN_BUILD_TYPES=Release
+
+      - <<: *linux
         env: CONAN_GCC_VERSIONS=6 CONAN_DOCKER_IMAGE=lasote/conangcc6 CONAN_BUILD_TYPES=Release
 
       - <<: *linux
