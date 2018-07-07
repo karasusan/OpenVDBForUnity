@@ -9,13 +9,9 @@ namespace OpenVDB
         /// <summary>
         /// Call from Unity Cloud Build to build OpenVdb.unitypackage automatically
         /// </summary>
-        public static void PostProcess()
+        public static void PreProcess()
         {
             Debug.LogFormat("PostExport Start");
-
-            Debug.LogFormat("PlayerSettings.GetScriptingDefineSymbolsForGroup = {0}", PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup));
-            foreach(var def in EditorUserBuildSettings.activeScriptCompilationDefines)
-                Debug.LogFormat("EditorUserBuildSettings.activeScriptCompilationDefines = {0}", def);
 
             var exportDir = FileUtil.GetUniqueTempPathInProject();
             Directory.CreateDirectory(exportDir);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 namespace OpenVDB
 {
@@ -10,6 +11,12 @@ namespace OpenVDB
 
         public static bool Upload(string path)
         {
+            if (!Directory.Exists(Application.streamingAssetsPath))
+            {
+                Directory.CreateDirectory(Application.streamingAssetsPath);
+            }
+            File.Copy(path, Path.Combine(Application.streamingAssetsPath, Path.GetFileName(path)));
+            AssetDatabase.Refresh();
             return true;
         }
     }
