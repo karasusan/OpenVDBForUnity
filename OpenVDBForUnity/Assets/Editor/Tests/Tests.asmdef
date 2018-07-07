@@ -1,7 +1,8 @@
 {
     "name": "Tests",
     "references": [
-        "OpenVDBAssembly"
+        "OpenVDB",
+        "PackageBuild"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"
