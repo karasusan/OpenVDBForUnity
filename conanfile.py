@@ -23,11 +23,6 @@ class OpenVDBNativePluginConan(ConanFile):
         if self.settings.os == "Windows":
             self.options.remove("fPIC")
 
-        # Fix me
-        # work around rpath problem
-        if self.settings.os != "Windows" and self.options["TBB"].shared:
-            self.options["TBB"].shared = False
-
     def configure(self):
         if self.options.shared and "fPIC" in self.options.fields:
             self.options.fPIC = True
