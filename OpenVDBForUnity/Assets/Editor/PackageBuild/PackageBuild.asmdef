@@ -1,3 +1,10 @@
-﻿{
-	"name": "PackageBuild"
+{
+    "name": "PackageBuild",
+    "references": [],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
 }
