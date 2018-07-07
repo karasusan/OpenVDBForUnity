@@ -3,11 +3,11 @@ import shutil
 from conans import ConanFile, CMake, tools
 
 
-class OpenVDBForUnityConan(ConanFile):
-    name = "OpenVDBForUnity"
+class OpenVDBNativePluginConan(ConanFile):
+    name = "OpenVDBNativePlugin"
     version = "0.0.1"
     license = "MIT"
-    description = "OpenVDBForUnity is an open source C++ library for Unity plugin of OpenVDB"
+    description = "OpenVDBNativePlugin is an open source C++ library for Unity plugin of OpenVDB"
     url = "https://github.com/karasusan/OpenVDBForUnity"
     requires = ( "OpenVDB/4.0.2@kazuki/stable"
                )

@@ -1,4 +1,4 @@
-PROJECT(OpenVDBForUnity)
+PROJECT(OpenVDBNativePlugin)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)

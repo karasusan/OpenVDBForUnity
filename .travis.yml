@@ -1,7 +1,7 @@
 
 env:
    global:
-     - CONAN_REFERENCE: "OpenVDBForUnity/0.0.1"
+     - CONAN_REFERENCE: "OpenVDBNativePlugin/0.0.1"
      - CONAN_USERNAME: "kazuki"
      - CONAN_LOGIN_USERNAME: "kazuki"
      - CONAN_CHANNEL: "development"
