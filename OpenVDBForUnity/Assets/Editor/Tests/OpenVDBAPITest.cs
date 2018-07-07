@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System.Collections;
 
-namespace OpenVDB
+namespace OpenVDB.Tests
 {
     public class OpenVDBAPITest
     {

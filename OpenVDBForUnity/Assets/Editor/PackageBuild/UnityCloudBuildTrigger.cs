@@ -13,7 +13,9 @@ namespace OpenVDB
         {
             Debug.LogFormat("PostExport Start");
 
-            var exportPath = Path.GetDirectoryName(EditorApplication.applicationPath);
+            var exportPath = FileUtil.GetUniqueTempPathInProject();
+            Directory.CreateDirectory(exportPath);
+
             var info = PackageBuilder.Build(exportPath);
 
             Debug.LogFormat("PostExport End. Build {0}. FileSize:{1} ExportPath:{2}", 

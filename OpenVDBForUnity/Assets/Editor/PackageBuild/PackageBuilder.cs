@@ -3,14 +3,14 @@ using UnityEditor;
 
 namespace OpenVDB
 {
-    class PackageBuildInfo
+    public class PackageBuildInfo
     {
         public bool succeed;
         public string exportPath;
         public long fileSize;
     }
 
-    static class PackageBuilder
+    public static class PackageBuilder
     {
         const string PackageFileName = "OpenVDB.unitypackage";
         static string[] AssetPathNames =

@@ -1,8 +1,9 @@
 using UnityEngine.TestTools;
 using NUnit.Framework;
-using System.Collections;
+using UnityEditor;
+using System.IO;
 
-namespace OpenVDB
+namespace OpenVDB.Tests
 {
     public class PackageBuildTest
     {
@@ -12,14 +13,14 @@ namespace OpenVDB
             Assert.IsTrue(LibraryDownloader.Run());
         }
 
-        // A UnityTest behaves like a coroutine in PlayMode
-        // and allows you to yield null to skip a frame in EditMode
-        [UnityTest]
-        public IEnumerator NewTestScriptWithEnumeratorPasses()
+        [Test]
+        public void PackageBuilderBuildPasses()
         {
-            // Use the Assert class to test conditions.
-            // yield to skip a frame
-            yield return null;
+            var tempPath = FileUtil.GetUniqueTempPathInProject();
+
+            Directory.CreateDirectory(tempPath);
+            var info = PackageBuilder.Build(tempPath);
+            Assert.True(info.succeed);
         }
     }
 }
