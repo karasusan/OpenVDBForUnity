@@ -25,7 +25,7 @@ class OpenVDBNativePluginConan(ConanFile):
 
         # Fix me
         # work around rpath problem
-        if self.settings.os != "Windows":
+        if self.settings.os != "Windows" and self.options["TBB"].shared:
             self.options["TBB"].shared = False
 
     def configure(self):
