@@ -13,15 +13,21 @@ namespace OpenVDB
         {
             Debug.LogFormat("PostExport Start");
 
-            var exportPath = FileUtil.GetUniqueTempPathInProject();
-            Directory.CreateDirectory(exportPath);
+            Debug.LogFormat("PlayerSettings.GetScriptingDefineSymbolsForGroup = {0}", PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup));
+            foreach(var def in EditorUserBuildSettings.activeScriptCompilationDefines)
+                Debug.LogFormat("EditorUserBuildSettings.activeScriptCompilationDefines = {0}", def);
 
-            var info = PackageBuilder.Build(exportPath);
+            var exportDir = FileUtil.GetUniqueTempPathInProject();
+            Directory.CreateDirectory(exportDir);
+
+            var info = PackageBuilder.Build(exportDir);
 
             Debug.LogFormat("PostExport End. Build {0}. FileSize:{1} ExportPath:{2}", 
                             info.succeed ? "Succeed" : "Failed", 
-                            info.fileSize, 
+                            info.fileSize,
                             info.exportPath);
+
+            PackageUploader.Upload(info.exportPath);
         }
     }
 }

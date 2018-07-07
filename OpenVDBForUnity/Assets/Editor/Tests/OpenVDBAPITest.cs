@@ -7,7 +7,7 @@ namespace OpenVDB.Tests
     public class OpenVDBAPITest
     {
 
-        [Test]
+        [Test, Ignore("Fix library deployment")]
         public void InitializeSimplePasses()
         {
             OpenVDBAPI.oiInitialize();

@@ -17,7 +17,7 @@ namespace OpenVDB
 
     public static class LibraryDownloader
     {
-        const string LibraryDownloadURL = "https://dl.bintray.com/kazuki/conan/kazuki/OpenVDBForUnity/{0}/{1}/package/{2}/{3}";
+        const string LibraryDownloadURL = "https://dl.bintray.com/kazuki/conan/kazuki/OpenVDBNativePlugin/{0}/{1}/package/{2}/{3}";
         const string LibraryVersion = "0.0.1";
         const string LibraryChannel = "stable";
         const string LibraryTgzFileName = "conan_package.tgz";
