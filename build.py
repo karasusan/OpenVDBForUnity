@@ -10,6 +10,8 @@ if __name__ == "__main__":
     for settings, options, env_vars, build_requires, reference in builder.items:
         if platform.system() == "Windows" and not options["OpenVDBNativePlugin:shared"]:
             options["OpenVDBNativePlugin:shared"] = True
+        if platform.system() != "Windows" and not options["OpenVDBNativePlugin:shared"]:
+            continue
         filtered_builds.append([settings, options, env_vars, build_requires])
-    builder.builds = filtered_builds 
+    builder.builds = filtered_builds
     builder.run()
