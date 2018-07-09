@@ -27,9 +27,9 @@ namespace OpenVDB
         static LibraryPackageInfo[] Infos = 
         {
             new LibraryPackageInfo { os = "Windows", arch = "x86", packageId = "07a258b63529b1a6b9517b05bd8057994689b8eb" },
-            new LibraryPackageInfo { os = "Windows", arch = "x86_64", packageId = "07a258b63529b1a6b9517b05bd8057994689b8eb" },
-            new LibraryPackageInfo { os = "Macos", arch = "x86_64", packageId = "07a258b63529b1a6b9517b05bd8057994689b8eb" },
-            new LibraryPackageInfo { os = "Linux", arch = "x86_64", packageId = "07a258b63529b1a6b9517b05bd8057994689b8eb" },
+            new LibraryPackageInfo { os = "Windows", arch = "x86_64", packageId = "2c0ede688cb6609cf77dafa57a7200b861971804" },
+            new LibraryPackageInfo { os = "Macos", arch = "x86_64", packageId = "267209270177540f16ec5a6a007b22ed0457c5b2" },
+            new LibraryPackageInfo { os = "Linux", arch = "x86_64", packageId = "e8de85f12f9f4405cbaf1c4b62e665d6b58020a9" },
         };
 
 

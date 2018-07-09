@@ -1,4 +1,3 @@
-using UnityEngine.TestTools;
 using NUnit.Framework;
 using UnityEditor;
 using System.IO;
@@ -7,7 +6,7 @@ namespace OpenVDB.Tests
 {
     public class PackageBuildTest
     {
-        [Test, Ignore("Fix library deployment")]
+        [Test]
         public void LibraryDownloadPasses()
         {
             Assert.IsTrue(LibraryDownloader.Run());

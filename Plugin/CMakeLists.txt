@@ -6,7 +6,7 @@ conan_basic_setup()
 
 ADD_DEFINITIONS(-std=c++11)
 
-LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(AddPlugin)
 
 ADD_SUBDIRECTORY(openvdbi)
