@@ -6,7 +6,7 @@ openvdbiAPI void oiInitialize()
 	openvdb::initialize();
 }
 
-openvdbiAPI void oiUnInitialize()
+openvdbiAPI void oiUninitialize()
 {
 	openvdb::uninitialize();
 }
