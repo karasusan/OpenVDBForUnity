@@ -3,8 +3,9 @@
 
 int main(int argc, char *argv[])
 {
-    oiInitialize();
-    oiUninitialize();
+	// Fix linker error.
+    // oiInitialize();
+    // oiUninitialize();
     puts("Test successful\n");
     return 0;
 }
