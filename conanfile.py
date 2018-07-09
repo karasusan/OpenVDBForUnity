@@ -26,7 +26,11 @@ class OpenVDBNativePluginConan(ConanFile):
     def configure(self):
         if self.options.shared and "fPIC" in self.options.fields:
             self.options.fPIC = True
-
+            # Set fPIC=True to all dependencies that have the option.
+            for _, pkg_opts in self.options.deps_package_values.items():
+                if "fPIC" in pkg_opts.fields:
+                    pkg_opts.fPIC = True
+                    
         if self.settings.os != "Windows":
             self.options["TBB"].shared = False
 
