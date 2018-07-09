@@ -27,6 +27,9 @@ class OpenVDBNativePluginConan(ConanFile):
         if self.options.shared and "fPIC" in self.options.fields:
             self.options.fPIC = True
 
+        if self.settings.os != "Windows":
+            self.options["TBB"].shared = False
+
     def source(self):
         self.run("git clone https://github.com/karasusan/OpenVDBForUnity src")
         # self.run("cd src && git checkout v%s" % self.version)
