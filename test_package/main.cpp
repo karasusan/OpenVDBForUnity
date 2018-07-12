@@ -3,9 +3,17 @@
 
 int main(int argc, char *argv[])
 {
-	// Fix linker error.
-    // oiInitialize();
-    // oiUninitialize();
+    oiInitialize();
+
+    auto uid = 1;
+    oiContext* ctx = oiContextCreate(uid);
+    auto succeed = oiContextLoad(ctx, "");
+    oiContextDestroy(ctx);
+
+    printf("%d\n", succeed);
+
+    oiUninitialize();
+
     puts("Test successful\n");
     return 0;
 }
