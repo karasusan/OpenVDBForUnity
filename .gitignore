@@ -4,6 +4,8 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+cmake-build-debug/
+cmake-build-release/
 
 # Visual Studio cache directory
 .vs/
@@ -34,3 +36,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Test resource
+*.vdb
+*.vdb.meta
