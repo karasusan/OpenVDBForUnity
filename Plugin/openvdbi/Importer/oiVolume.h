@@ -1,8 +1,8 @@
 #pragma once
 
 class oiContext;
-class oiVolumeData;
-class oiVolumeSummary;
+struct oiVolumeData;
+struct oiVolumeSummary;
 
 class oiVolume
 {
