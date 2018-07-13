@@ -27,9 +27,9 @@ namespace OpenVDB
         public oiVolume volume { get { return oiContextGetVolume(self); } }
 
         #region internal
-        [DllImport("openvdbi")] public static extern oiContext oiContextCreate(int uid);
+        [DllImport("openvdbi")] static extern oiContext oiContextCreate(int uid);
         [DllImport("openvdbi")] static extern Bool oiContextLoad(IntPtr ctx, string path);
-        [DllImport("openvdbi")] public static extern void oiContextDestroy(IntPtr ctx);
+        [DllImport("openvdbi")] static extern void oiContextDestroy(IntPtr ctx);
         [DllImport("openvdbi")] static extern oiVolume oiContextGetVolume(IntPtr ctx);
         #endregion
     }
@@ -51,7 +51,5 @@ namespace OpenVDB
     {
         [DllImport("openvdbi")] public static extern void oiInitialize();
         [DllImport("openvdbi")] public static extern void oiUninitialize();
-
-
     }
 }

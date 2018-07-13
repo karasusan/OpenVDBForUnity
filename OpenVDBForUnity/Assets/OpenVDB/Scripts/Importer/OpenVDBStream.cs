@@ -10,6 +10,7 @@ namespace OpenVDB
     public class OpenVDBStream : IDisposable
     {
         static List<OpenVDBStream> s_streams = new List<OpenVDBStream>();
+        static bool s_initialized;
 
         OpenVDBStreamDescriptor m_streamDesc;
         GameObject m_go;
@@ -33,6 +34,11 @@ namespace OpenVDB
 
         public void Load()
         {
+            if(!s_initialized)
+            {
+                OpenVDBAPI.oiInitialize();
+                s_initialized = true;
+            }
             var context = oiContext.Create(m_go.GetInstanceID());
             var loaded = context.Load(Application.streamingAssetsPath + m_streamDesc.pathToVDB);
             if(loaded)

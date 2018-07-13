@@ -8,7 +8,7 @@ using Extensions;
 
 namespace OpenVDB
 {
-    [ScriptedImporter(2, "abc")]
+    [ScriptedImporter(2, "vdb")]
     public class AlembicImporter : ScriptedImporter
     {
         [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
@@ -21,7 +21,16 @@ namespace OpenVDB
         public override void OnImportAsset(AssetImportContext ctx)
         {
             var shortAssetPath = MakeShortAssetPath(ctx.assetPath);
+            var sourcePath = Application.dataPath + shortAssetPath;
             var destPath = Application.streamingAssetsPath + shortAssetPath;
+            var directoryPath = Path.GetDirectoryName(destPath);
+
+            if (!Directory.Exists(directoryPath))
+                Directory.CreateDirectory(directoryPath);
+            if (File.Exists(destPath))
+                File.SetAttributes(destPath, FileAttributes.Normal);
+            File.Copy(sourcePath, destPath, true);
+
             var fileName = Path.GetFileNameWithoutExtension(destPath);
             var go = new GameObject(fileName);
 
