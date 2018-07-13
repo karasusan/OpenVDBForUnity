@@ -125,6 +125,8 @@ bool oiContext::load(const char *in_path)
         auto message = error.what();
         DebugLog("Failed to open archive: %s", message);
     }
+    DebugLog("oiContext::load: file.open succeed");
+
     m_archive = file.copy().get();
     openvdb::GridPtrVecPtr grids = file.getGrids();
     openvdb::GridCPtrVec allGrids;
@@ -140,7 +142,9 @@ bool oiContext::load(const char *in_path)
     auto grid = openvdb::gridConstPtrCast<openvdb::FloatGrid>(allGrids[0]);
     openvdb::Coord extents{256, 256, 256};
 
+    DebugLog("oiContext::load: start instantiate oiVolume");
     m_volume = new oiVolume(*grid, extents);
+    DebugLog("oiContext::load: end instantiate oiVolume");
     return true;
 }
 
