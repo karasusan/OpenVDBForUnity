@@ -1,5 +1,4 @@
 #include <cstdio>
-#include "pch.h"
 #include "openvdbi.h"
 
 int main(int argc, char *argv[])

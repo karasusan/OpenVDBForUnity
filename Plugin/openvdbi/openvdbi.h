@@ -22,6 +22,10 @@
     #else
         #define openvdbiAPI extern "C"
     #endif
+
+    struct openvdbV4 { float x, y, z, w; };
+
 #endif // openvdbiImpl
+
 
 #include "Importer/OpenVDBImporter.h"
