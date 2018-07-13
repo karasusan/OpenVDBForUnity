@@ -1,4 +1,4 @@
-file(GLOB sources *.cpp *.h Importer/*.h Importer/*.cpp)
+file(GLOB sources *.cpp *.h Importer/*.h Importer/*.cpp Foundation/*.h Foundation/*.cpp)
 
 IF(BUILD_SHARED_LIBS)
     set(ENABLE_DEPLOY OFF)

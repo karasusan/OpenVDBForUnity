@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "oiInternal.h"
 #include "oiContext.h"
+#include "oiVolume.h"
 
 static std::wstring L(const std::string& s)
 {
@@ -95,7 +96,7 @@ bool oiContext::load(const char *in_path)
     auto path = NormalizePath(in_path);
     auto wpath = L(in_path);
 
-    DebugLogW(L"oiContext::load: '%s'", wpath.c_str());
+    DebugLog("oiContext::load: '%s'", in_path);
     if (path == m_path && m_archive)
     {
         DebugLog("oiContext::load: Context already loaded for gameObject with id %d", m_uid);
@@ -121,16 +122,29 @@ bool oiContext::load(const char *in_path)
     }
     catch(openvdb::IoError error)
     {
-        auto message = L(error.what());
-        DebugLogW(L"Failed to open archive: %s", message.c_str());
+        auto message = error.what();
+        DebugLog("Failed to open archive: %s", message);
     }
     m_archive = file.copy().get();
+    openvdb::GridPtrVecPtr grids = file.getGrids();
+    openvdb::GridCPtrVec allGrids;
+    allGrids.insert(allGrids.end(), grids->begin(), grids->end());
+
     file.close();
 
+    if (grids->empty())
+    {
+        DebugLog("VDB file is empty");
+        return true;
+    }
+    auto grid = openvdb::gridConstPtrCast<openvdb::FloatGrid>(allGrids[0]);
+    openvdb::Coord extents{256, 256, 256};
+
+    m_volume = new oiVolume(*grid, extents);
     return true;
 }
 
-oiObject* oiContext::getObject() const
+oiVolume* oiContext::getVolume() const
 {
-    //return m_top_node.get();
+    return m_volume;
 }

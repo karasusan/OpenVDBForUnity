@@ -47,3 +47,4 @@ void LogPrint(const char* fmt, ...);
     #pragma warning(disable: 4996)
     #pragma warning(disable: 4190)
 #endif // _WIN32
+struct openvdbV4 { float x, y, z, w; };

@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "oiInternal.h"
 #include "oiContext.h"
-#include "oiObject.h"
+#include "oiVolume.h"
+#include "OpenVDBImporter.h"
 
 openvdbiAPI void oiInitialize()
 {
@@ -29,7 +30,26 @@ openvdbiAPI bool oiContextLoad(oiContext* ctx, const char *path)
 	return ctx ? ctx->load(path) : false;
 }
 
-openvdbiAPI oiObject* oiContextGetObject(oiContext* ctx)
+openvdbiAPI oiVolume* oiContextGetVolume(oiContext* ctx)
 {
-    return ctx ? ctx->getObject() : 0;
+    return ctx ? ctx->getVolume() : 0;
+}
+
+openvdbiAPI void oiVolumeGetSummary(oiVolume* volume, oiVolumeSummary* dst)
+{
+    if(!volume)
+    {
+        return;
+    }
+    *dst = volume->getSummary();
+}
+
+openvdbiAPI void oiVolumeFillData(oiVolume* volume, oiVolumeData* dst)
+{
+    if(!volume)
+    {
+        return;
+    }
+    volume->fillTextureBuffer(*dst);
+
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-class oiObject;
+class oiVolume;
 
 class oiContext
 {
@@ -11,7 +11,7 @@ public:
     bool load(const char *path);
     const std::string& getPath() const;
 
-    oiObject* getObject() const;
+    oiVolume* getVolume() const;
     int getUid() const;
 
 private:
@@ -21,6 +21,7 @@ private:
 
     std::string m_path;
     openvdb::io::Archive* m_archive;
+    oiVolume* m_volume;
 };
 
 class oiContextManager
