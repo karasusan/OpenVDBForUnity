@@ -25,4 +25,12 @@ class DefaultNameConan(ConanFile):
         self.copy("*.dylib", dst="bin", src="lib")
 
     def test(self):
+        ld_lib_path_envvar = { "Linux": "LD_LIBRARY_PATH"
+                             , "Macos": "DYLD_LIBRARY_PATH"
+                             }.get(str(self.settings.os))
+        if ld_lib_path_envvar:
+            ld_library_paths = os.environ.get(ld_lib_path_envvar, "").split(":")
+            ld_library_paths = [path for path in ld_library_paths if path]
+            ld_library_paths.extend(self.deps_cpp_info.lib_paths)
+            os.environ[ld_lib_path_envvar] = ":".join(ld_library_paths)
         self.run("cd bin && .%stestPackage" % os.sep)
