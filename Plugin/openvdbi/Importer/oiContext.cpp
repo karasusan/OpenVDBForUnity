@@ -115,6 +115,7 @@ bool oiContext::load(const char *in_path)
 
     try
     {
+        DebugLog("oiContext::load: file.open() start");
         if(!file.open())
         {
             return false;
