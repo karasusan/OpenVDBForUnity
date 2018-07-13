@@ -1,20 +1,99 @@
 ﻿#if UNITY_2017_1_OR_NEWER
 
 using UnityEngine;
+using System.IO;
 using UnityEditor.Experimental.AssetImporters;
+using System.Text.RegularExpressions;
+using Extensions;
 
 namespace OpenVDB
 {
     [ScriptedImporter(2, "abc")]
     public class AlembicImporter : ScriptedImporter
     {
+        [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
+
+        public static string MakeShortAssetPath(string assetPath)
+        {
+            return Regex.Replace(assetPath, "^Assets", "");
+        }
+
         public override void OnImportAsset(AssetImportContext ctx)
         {
+            var shortAssetPath = MakeShortAssetPath(ctx.assetPath);
+            var destPath = Application.streamingAssetsPath + shortAssetPath;
+            var fileName = Path.GetFileNameWithoutExtension(destPath);
+            var go = new GameObject(fileName);
+
             var streamDescriptor = ScriptableObject.CreateInstance<OpenVDBStreamDescriptor>();
-            
-            using (var vdbStream = new OpenVDBStream(streamDescriptor))
+            streamDescriptor.name = go.name + "_ABCDesc";
+            streamDescriptor.pathToVDB = shortAssetPath;
+            streamDescriptor.settings = streamSettings;
+
+            using (var vdbStream = new OpenVDBStream(go, streamDescriptor))
             {
-                
+                vdbStream.Load();
+
+                var subassets = new Subassets(ctx);
+                subassets.Add(streamDescriptor.name, streamDescriptor);
+                GenerateSubAssets(subassets, vdbStream, streamDescriptor);
+            }
+        }
+
+        class Subassets
+        {
+            AssetImportContext m_ctx;
+            Material m_defaultMaterial;
+
+            public Subassets(AssetImportContext ctx)
+            {
+                m_ctx = ctx;
+            }
+
+            public Material defaultMaterial
+            {
+                get
+                {
+                    if (m_defaultMaterial == null)
+                    {
+                        m_defaultMaterial = new Material(Shader.Find("OpenVDB/Standard"));
+                        m_defaultMaterial.hideFlags = HideFlags.NotEditable;
+                        m_defaultMaterial.name = "Default Material";
+                        Add("Default Material", m_defaultMaterial);
+                    }
+                    return m_defaultMaterial;
+                }
+            }
+            public void Add(string identifier, Object asset)
+            {
+#if UNITY_2017_3_OR_NEWER
+                m_ctx.AddObjectToAsset(identifier, asset);
+#else
+                m_ctx.AddSubAsset(identifier, asset);
+#endif
+            }
+        }
+
+        void GenerateSubAssets(Subassets subassets, OpenVDBStream stream, OpenVDBStreamDescriptor streamDescr)
+        {
+            CollectSubAssets(subassets, stream);
+        }
+
+        void CollectSubAssets(Subassets subassets, OpenVDBStream stream)
+        {
+            var go = stream.gameObject;
+            var meshFilter = go.GetOrAddComponent<MeshFilter>();
+            if (meshFilter != null)
+            {
+                meshFilter.sharedMesh = stream.mesh;
+                meshFilter.sharedMesh.name = go.name;
+                subassets.Add(meshFilter.sharedMesh.name, meshFilter.sharedMesh);
+            }
+            var renderer = go.GetOrAddComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                renderer.sharedMaterial = subassets.defaultMaterial;
+                renderer.sharedMaterial.SetTexture("_Volume", stream.texture3D);
             }
         }
     }
