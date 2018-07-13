@@ -124,6 +124,18 @@ bool oiContext::load(const char *in_path)
     {
         auto message = error.what();
         DebugLog("Failed to open archive: %s", message);
+        return false;
+    }
+    catch(std::exception &error)
+    {
+        auto message = error.what();
+        DebugLog("Failed to open archive: %s", message);
+        return false;
+    }
+    catch(...)
+    {
+        DebugLog("Unknown error");
+        return false;
     }
     DebugLog("oiContext::load: file.open succeed");
 
