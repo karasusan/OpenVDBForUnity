@@ -5,14 +5,13 @@ namespace OpenVDB
 {
     public class OpenVDBVolume: IDisposable
     {
-        Texture3D m_texture;
+        Texture3D m_texture3D;
         Mesh m_mesh;
-        PinnedList<Color> m_voxels = new PinnedList<Color>();
 
         oiVolume m_volume;
         oiVolumeSummary m_summary;
 
-        public Texture3D texture3D { get { return m_texture; } }
+        public Texture3D texture3D { get { return m_texture3D; } }
 
         public Mesh mesh { get { return m_mesh; } }
 
@@ -25,10 +24,10 @@ namespace OpenVDB
 
         public void SyncDataBegin()
         {
-            if (m_texture != null)
+            if (m_texture3D != null)
             {
-                UnityEngine.Object.Destroy(m_texture);
-                m_texture = null;
+                UnityEngine.Object.Destroy(m_texture3D);
+                m_texture3D = null;
             }
             if (m_mesh != null)
             {
@@ -40,14 +39,19 @@ namespace OpenVDB
             var width = m_summary.width;
             var height = m_summary.height;
             var depth = m_summary.depth;
-            m_texture = new Texture3D(width, height, depth, TextureFormat.RGBA32, false);
+            var format = (TextureFormat)m_summary.format;
+            m_texture3D = new Texture3D(width, height, depth, format, false);
 
             // instantiate volumeData
             var volumeData = default(oiVolumeData);
-            volumeData.voxels = new PinnedList<Color>(m_texture.GetPixels());
+            volumeData.voxels = new PinnedList<Color>(m_texture3D.GetPixels());
 
             // kick async copy
             m_volume.FillData(ref volumeData);
+
+            // create mesh
+            var position = Vector3.zero;
+            m_mesh = Voxelizer.VoxelMesh.Build(new []{position}, 1f);
         }
 
         public void SyncDataEnd()
@@ -56,10 +60,10 @@ namespace OpenVDB
 
         public void Dispose()
         {
-            if(m_texture != null)
+            if(m_texture3D != null)
             {
-                UnityEngine.Object.Destroy(m_texture);
-                m_texture = null;
+                UnityEngine.Object.Destroy(m_texture3D);
+                m_texture3D = null;
             }
         }
     }
