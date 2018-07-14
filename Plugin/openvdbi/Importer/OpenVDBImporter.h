@@ -10,14 +10,24 @@ struct oiVolumeSummary
     int height = 0;
     int depth = 0;
     int format = 0;
+    float min_value = 0;
+    float max_value = 0;
+
 
     oiVolumeSummary() {}
-    oiVolumeSummary(int c, int w, int h, int d, int f) : voxel_count(c), width(w), height(h), depth(d), format(f){}
+    oiVolumeSummary(int c, int w, int h, int d, int f, float min, float max)
+            : voxel_count(c),
+              width(w),
+              height(h),
+              depth(d),
+              format(f),
+              min_value(min),
+              max_value(max) {}
 };
 
 struct oiVolumeData
 {
-    openvdbV4 *voxels = nullptr;
+    void *voxels = nullptr;
 };
 
 openvdbiAPI void oiInitialize();
