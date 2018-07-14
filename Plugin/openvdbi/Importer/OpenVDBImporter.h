@@ -9,10 +9,10 @@ struct oiVolumeSummary
     int width = 0;
     int height = 0;
     int depth = 0;
+    int format = 0;
 
     oiVolumeSummary() {}
-    oiVolumeSummary(int c, int w, int h, int d) : voxel_count(c), width(w), height(h), depth(d){}
-
+    oiVolumeSummary(int c, int w, int h, int d, int f) : voxel_count(c), width(w), height(h), depth(d), format(f){}
 };
 
 struct oiVolumeData

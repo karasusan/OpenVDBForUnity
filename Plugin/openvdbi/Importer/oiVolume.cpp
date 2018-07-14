@@ -145,7 +145,8 @@ oiVolume::oiVolume(const openvdb::FloatGrid& grid, const openvdb::Coord& extents
     grid.print();
 
     int voxel_count = extents.x() * extents.y() * extents.z();
-    m_summary = new oiVolumeSummary(voxel_count, extents.x(), extents.y(), extents.z());
+    int texture_format = 5;
+    m_summary = new oiVolumeSummary(voxel_count, extents.x(), extents.y(), extents.z(), texture_format);
 }
 
 oiVolume::~oiVolume()
@@ -158,13 +159,16 @@ void oiVolume::reset()
 
 void oiVolume::fillTextureBuffer(oiVolumeData& data) const
 {
+    DebugLog("oiVolume::fillTextureBuffer start");
+
     if(!data.voxels)
     {
+        DebugLog("oiVolume::fillTextureBuffer voxels pointer is null");
         return;
     }
 
     openvdb::Coord extents{m_summary->width, m_summary->height, m_summary->depth};
-    sampleGrid(m_grid, extents, (float*)data.voxels);
+    sampleGrid(m_grid, extents, (char*)data.voxels);
 }
 
 const oiVolumeSummary& oiVolume::getSummary() const
