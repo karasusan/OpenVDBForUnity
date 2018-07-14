@@ -152,10 +152,9 @@ bool oiContext::load(const char *in_path)
         DebugLog("VDB file is empty");
         return true;
     }
-    auto grid = openvdb::gridConstPtrCast<openvdb::FloatGrid>(allGrids[0]);
-    openvdb::Coord extents{256, 256, 256};
+    m_grid = openvdb::gridConstPtrCast<openvdb::FloatGrid>(allGrids[0]);
 
-    m_volume = new oiVolume(*grid, extents);
+    m_volume = new oiVolume(*m_grid, m_extents);
     return true;
 }
 

@@ -21,6 +21,9 @@ private:
 
     std::string m_path;
     openvdb::io::Archive* m_archive;
+    openvdb::FloatGrid::ConstPtr m_grid;
+    openvdb::Coord m_extents = {256, 256, 256};
+
     oiVolume* m_volume;
 };
 

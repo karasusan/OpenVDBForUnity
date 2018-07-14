@@ -25,19 +25,7 @@ namespace OpenVDB
 
         public void SyncDataBegin()
         {
-            var voxelCount = m_summary.voxelCount;
-            m_voxels.ResizeDiscard(voxelCount);
-
-            var volumeData = default(oiVolumeData);
-            volumeData.voxels = m_voxels;
-
-            // kick async copy
-            m_volume.FillData(ref volumeData);
-        }
-
-        public void SyncDataEnd()
-        {
-            if(m_texture != null)
+            if (m_texture != null)
             {
                 UnityEngine.Object.Destroy(m_texture);
                 m_texture = null;
@@ -48,13 +36,22 @@ namespace OpenVDB
                 m_mesh = null;
             }
 
+            // create 3d texture 
             var width = m_summary.width;
             var height = m_summary.height;
             var depth = m_summary.depth;
             m_texture = new Texture3D(width, height, depth, TextureFormat.RGBA32, false);
-            m_texture.SetPixels(m_voxels.Array, 0);
 
-            //mesh = 
+            // instantiate volumeData
+            var volumeData = default(oiVolumeData);
+            volumeData.voxels = new PinnedList<Color>(m_texture.GetPixels());
+
+            // kick async copy
+            m_volume.FillData(ref volumeData);
+        }
+
+        public void SyncDataEnd()
+        {
         }
 
         public void Dispose()

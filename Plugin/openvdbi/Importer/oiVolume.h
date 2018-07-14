@@ -14,8 +14,10 @@ public:
     void fillTextureBuffer(oiVolumeData& data) const;
     const oiVolumeSummary& getSummary() const;
 
-    IArray<openvdbV4> m_values_ref;
-    RawVector<openvdbV4> m_buf_values;
+    //IArray<openvdbV4> m_values_ref;
+    //RawVector<openvdbV4 > m_values;
 private:
     oiVolumeSummary* m_summary;
+    const openvdb::FloatGrid& m_grid;
+    const openvdb::Coord& m_extents;
 };

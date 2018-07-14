@@ -140,14 +140,12 @@ bool sampleGrid(
 }
 
 oiVolume::oiVolume(const openvdb::FloatGrid& grid, const openvdb::Coord& extents)
+    : m_grid(grid), m_extents(extents)
 {
     grid.print();
 
     int voxel_count = extents.x() * extents.y() * extents.z();
     m_summary = new oiVolumeSummary(voxel_count, extents.x(), extents.y(), extents.z());
-
-    float* buffer = new float[voxel_count*4];
-    sampleGrid(grid, extents, buffer);
 }
 
 oiVolume::~oiVolume()
@@ -156,12 +154,17 @@ oiVolume::~oiVolume()
 
 void oiVolume::reset()
 {
-    m_values_ref.reset();
 }
 
 void oiVolume::fillTextureBuffer(oiVolumeData& data) const
 {
-    m_values_ref.copy_to(data.voxels, m_summary->voxel_count, 0);
+    if(!data.voxels)
+    {
+        return;
+    }
+
+    openvdb::Coord extents{m_summary->width, m_summary->height, m_summary->depth};
+    sampleGrid(m_grid, extents, (float*)data.voxels);
 }
 
 const oiVolumeSummary& oiVolume::getSummary() const

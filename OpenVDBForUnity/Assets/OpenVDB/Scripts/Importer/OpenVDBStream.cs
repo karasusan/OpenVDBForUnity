@@ -58,7 +58,7 @@ namespace OpenVDB
             if(m_volume != null)
             {
                 m_volume.SyncDataBegin();
-                m_volume.SyncDataEnd();
+                //m_volume.SyncDataEnd();
             }
         }
     }
