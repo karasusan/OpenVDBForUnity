@@ -1,3 +1,3 @@
 [submodule "OpenVDBForUnity/Packages/jp.kazuki.openvdb-samplemodels"]
 	path = OpenVDBForUnity/Packages/jp.kazuki.openvdb-samplemodels
-	url = git@github.com:kazuki/OpenVDBSampleModels.git
+	url = https://karasusan@github.com/karasusan/OpenVDBSampleModels.git
