@@ -105,15 +105,14 @@ bool sampleVolume( const openvdb::Coord& extents, SamplingFunc sampling_func, Fl
                         for (auto x = bbox.min().x(); x <= bbox.max().x(); ++x)
                         {
                             const auto domain_index = openvdb::Vec3i(x, y, z);
-                            const auto linear_index = domain_index.dot(stride);
+                            const auto linear_index = domain_index.dot(stride) * 4;
                             const auto sample_value = sampling_func(domain_index);
 
                             // fixme
-                            //out_samples[linear_index + 0] = sample_value;
-                            //out_samples[linear_index + 1] = sample_value;
-                            //out_samples[linear_index + 2] = sample_value;
-                            //out_samples[linear_index + 3] = sample_value;
-                            out_samples[linear_index] = sample_value;
+                            out_samples[linear_index + 0] = sample_value;
+                            out_samples[linear_index + 1] = sample_value;
+                            out_samples[linear_index + 2] = sample_value;
+                            out_samples[linear_index + 3] = sample_value;
                             this_thread_range.addValue(sample_value);
                         }
                     }
@@ -174,7 +173,7 @@ oiVolume::oiVolume(const openvdb::FloatGrid& grid, const openvdb::Coord& extents
     grid.print();
 
     int voxel_count = extents.x() * extents.y() * extents.z();
-    int texture_format = 18;
+    int texture_format = 20;
     m_summary = new oiVolumeSummary(voxel_count, extents.x(), extents.y(), extents.z(), texture_format, 0, 0);
 }
 
