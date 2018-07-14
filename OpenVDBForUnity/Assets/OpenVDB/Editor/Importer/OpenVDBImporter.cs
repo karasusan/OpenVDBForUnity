@@ -35,7 +35,7 @@ namespace OpenVDB
             var go = new GameObject(fileName);
 
             var streamDescriptor = ScriptableObject.CreateInstance<OpenVDBStreamDescriptor>();
-            streamDescriptor.name = go.name + "_ABCDesc";
+            streamDescriptor.name = go.name + "_VDBDesc";
             streamDescriptor.pathToVDB = shortAssetPath;
             streamDescriptor.settings = streamSettings;
 
@@ -46,6 +46,13 @@ namespace OpenVDB
                 var subassets = new Subassets(ctx);
                 subassets.Add(streamDescriptor.name, streamDescriptor);
                 GenerateSubAssets(subassets, vdbStream, streamDescriptor);
+
+#if UNITY_2017_3_OR_NEWER
+                ctx.AddObjectToAsset(go.name, go);
+                ctx.SetMainObject(go);
+#else
+                ctx.SetMainAsset(go.name, go);
+#endif
             }
         }
 
@@ -91,6 +98,11 @@ namespace OpenVDB
         void CollectSubAssets(Subassets subassets, OpenVDBStream stream)
         {
             var go = stream.gameObject;
+            if(stream.texture3D != null)
+            {
+                stream.texture3D.name = go.name;
+                subassets.Add(stream.texture3D.name, stream.texture3D);
+            }
             var meshFilter = go.GetOrAddComponent<MeshFilter>();
             if (meshFilter != null)
             {
