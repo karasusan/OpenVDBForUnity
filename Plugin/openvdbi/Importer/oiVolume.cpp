@@ -127,8 +127,9 @@ bool sampleVolume( const openvdb::Coord& extents, SamplingFunc sampling_func, Fl
     }
 
     // Remap sample values to [0, 1].
+    int size = num_voxels * 4;
     typedef tbb::blocked_range<size_t> tbb_range;
-    tbb::parallel_for(tbb_range(0, num_voxels), [out_samples, &out_value_range](const tbb_range& range)
+    tbb::parallel_for(tbb_range(0, size), [out_samples, &out_value_range](const tbb_range& range)
     {
         for (auto i = range.begin(); i < range.end(); ++i)
         {
