@@ -42,12 +42,18 @@ namespace OpenVDB
             var format = (TextureFormat)m_summary.format;
             m_texture3D = new Texture3D(width, height, depth, format, false);
 
+            var list = new PinnedList<Color>(m_texture3D.GetPixels());
+
             // instantiate volumeData
             var volumeData = default(oiVolumeData);
-            volumeData.voxels = new PinnedList<Color>(m_texture3D.GetPixels());
+            volumeData.voxels = list;
 
             // kick async copy
             m_volume.FillData(ref volumeData);
+
+            // copy buffer CPU to GPU
+            m_texture3D.SetPixels(list.Array);
+            m_texture3D.Apply();
 
             // create mesh
             var position = Vector3.zero;
