@@ -9,7 +9,7 @@ using Extensions;
 namespace OpenVDB
 {
     [ScriptedImporter(2, "vdb")]
-    public class OpenVDBImporter : ScriptedImporter
+    public class AlembicImporter : ScriptedImporter
     {
         [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
 
@@ -18,10 +18,22 @@ namespace OpenVDB
             return Regex.Replace(assetPath, "^Assets", "");
         }
 
+        public static string SourcePath(string assetPath)
+        {
+            if(assetPath.StartsWith("Packages", System.StringComparison.Ordinal))
+            {
+                return Path.Combine(Path.GetDirectoryName(Application.dataPath), assetPath);
+            }
+            else
+            {
+                return Path.Combine(Application.dataPath, assetPath);
+            }
+        }
+
         public override void OnImportAsset(AssetImportContext ctx)
         {
             var shortAssetPath = MakeShortAssetPath(ctx.assetPath);
-            var sourcePath = Path.Combine(Application.dataPath, shortAssetPath);
+            var sourcePath = SourcePath(shortAssetPath);
             var destPath = Path.Combine(Application.streamingAssetsPath, shortAssetPath);
             var directoryPath = Path.GetDirectoryName(destPath);
 

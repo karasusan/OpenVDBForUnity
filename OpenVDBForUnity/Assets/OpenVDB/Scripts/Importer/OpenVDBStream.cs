@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -40,7 +41,7 @@ namespace OpenVDB
                 s_initialized = true;
             }
             var context = oiContext.Create(m_go.GetInstanceID());
-            var loaded = context.Load(Application.streamingAssetsPath + m_streamDesc.pathToVDB);
+            var loaded = context.Load(Path.Combine(Application.streamingAssetsPath, m_streamDesc.pathToVDB));
             if(loaded)
             {
                 UpdateVDB(context);
