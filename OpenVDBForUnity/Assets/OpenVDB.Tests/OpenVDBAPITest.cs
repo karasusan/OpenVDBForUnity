@@ -18,20 +18,25 @@ namespace OpenVDB.Tests
             LibraryDownloader.Clear();
         }
 
-        [Test]
-        public void InitializeSimplePasses()
+        [SetUp]
+        public void SetUp()
         {
             OpenVDBAPI.oiInitialize();
         }
 
-        // A UnityTest behaves like a coroutine in PlayMode
-        // and allows you to yield null to skip a frame in EditMode
-        [UnityTest]
-        public IEnumerator NewTestScriptWithEnumeratorPasses()
+        [TearDown]
+        public void TearDown()
         {
-            // Use the Assert class to test conditions.
-            // yield to skip a frame
-            yield return null;
+            OpenVDBAPI.oiUninitialize();
+        }
+
+        [Test]
+        public void ContextCreatePasses()
+        {
+            var obj = new UnityEngine.GameObject();
+            var ctx = oiContext.Create(obj.GetInstanceID());
+            Assert.NotNull(ctx);
+            UnityEngine.Object.DestroyImmediate(obj);
         }
     }
 }

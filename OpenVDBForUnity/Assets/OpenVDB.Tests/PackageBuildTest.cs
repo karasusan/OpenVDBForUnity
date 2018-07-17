@@ -7,13 +7,14 @@ namespace OpenVDB.Tests
     public class PackageBuildTest
     {
         [Test]
-        public void LibraryDownloadPasses()
+        public void LibraryDownloaderRunPasses()
         {
+            LibraryDownloader.Clear();
             Assert.IsTrue(LibraryDownloader.Run());
         }
 
         [Test]
-        public void CopyPasses()
+        public void PackageBuilderCopyPasses()
         {
             var tempPath = FileUtil.GetUniqueTempPathInProject();
             File.WriteAllText(tempPath, "");
@@ -21,7 +22,7 @@ namespace OpenVDB.Tests
         }
 
         [Test]
-        public void BuildPasses()
+        public void PackageBuilderBuildPasses()
         {
             var tempPath = FileUtil.GetUniqueTempPathInProject();
 
