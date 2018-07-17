@@ -13,15 +13,15 @@ namespace OpenVDB.Tests
         }
 
         [Test]
-        public void PackageUploaderUploadPasses()
+        public void CopyPasses()
         {
             var tempPath = FileUtil.GetUniqueTempPathInProject();
             File.WriteAllText(tempPath, "");
-            PackageUploader.Upload(tempPath);
+            PackageBuilder.Copy(tempPath);
         }
 
         [Test]
-        public void PackageBuilderBuildPasses()
+        public void BuildPasses()
         {
             var tempPath = FileUtil.GetUniqueTempPathInProject();
 

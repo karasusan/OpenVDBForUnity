@@ -6,6 +6,17 @@ namespace OpenVDB.Tests
 {
     public class OpenVDBAPITest
     {
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            LibraryDownloader.Run();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            LibraryDownloader.Clear();
+        }
 
         [Test]
         public void InitializeSimplePasses()
