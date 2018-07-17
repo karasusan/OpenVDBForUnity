@@ -13,7 +13,7 @@ class OpenVDBNativePluginConan(ConanFile):
                )
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = { "shared": [True, False]
+    options = { "shared": [True]
               , "fPIC": [True, False]
               }
     default_options = "shared=True", "fPIC=True"
