@@ -14,6 +14,8 @@ class DefaultNameConan(ConanFile):
         # TBB.shared is True when it is default.
         if self.options["TBB"].shared:
             self.options["TBB"].shared = False
+        if self.options["OpenVDBNativePlugin"].shared:
+            self.options["OpenVDBNativePlugin"].shared = False
 
     def build(self):
         cmake = CMake(self)
