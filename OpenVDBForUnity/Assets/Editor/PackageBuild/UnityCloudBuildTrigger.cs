@@ -23,7 +23,7 @@ namespace OpenVDB
                             info.fileSize,
                             info.exportPath);
 
-            PackageUploader.Upload(info.exportPath);
+            PackageBuilder.Copy(info.exportPath);
         }
     }
 }

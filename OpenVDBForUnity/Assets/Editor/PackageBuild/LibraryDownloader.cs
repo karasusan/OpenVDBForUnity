@@ -72,7 +72,16 @@ namespace OpenVDB
             return true;
         }
 
-        public static byte[] Download(string url)
+        public static void Clear()
+        {
+            foreach(var info in Infos)
+            {
+                var path = Path.Combine(Application.dataPath, string.Format(LibraryDestFolder, info.arch));
+                Directory.Delete(path);
+            }
+        }
+
+        static byte[] Download(string url)
         {
             using(var request = UnityWebRequest.Get(url))
             {

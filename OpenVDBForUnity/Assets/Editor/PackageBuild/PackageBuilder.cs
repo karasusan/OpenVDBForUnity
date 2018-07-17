@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using UnityEngine;
 using UnityEditor;
 
 namespace OpenVDB
@@ -39,6 +40,16 @@ namespace OpenVDB
                 exportPath = exportPath,
                 fileSize = fileSize
             };
+        }
+
+        public static void Copy(string path)
+        {
+            if (!Directory.Exists(Application.streamingAssetsPath))
+            {
+                Directory.CreateDirectory(Application.streamingAssetsPath);
+            }
+            File.Copy(path, Path.Combine(Application.streamingAssetsPath, Path.GetFileName(path)));
+            AssetDatabase.Refresh();
         }
     }
 }
