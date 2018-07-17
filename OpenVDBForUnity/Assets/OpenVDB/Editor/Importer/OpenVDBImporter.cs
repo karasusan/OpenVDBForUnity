@@ -21,8 +21,8 @@ namespace OpenVDB
         public override void OnImportAsset(AssetImportContext ctx)
         {
             var shortAssetPath = MakeShortAssetPath(ctx.assetPath);
-            var sourcePath = Application.dataPath + shortAssetPath;
-            var destPath = Application.streamingAssetsPath + shortAssetPath;
+            var sourcePath = Path.Combine(Application.dataPath, shortAssetPath);
+            var destPath = Path.Combine(Application.streamingAssetsPath, shortAssetPath);
             var directoryPath = Path.GetDirectoryName(destPath);
 
             if (!Directory.Exists(directoryPath))
