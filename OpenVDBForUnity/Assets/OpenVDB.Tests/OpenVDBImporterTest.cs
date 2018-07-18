@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
+﻿using NUnit.Framework;
+using UnityEditor;
 
 namespace OpenVDB.Tests
 {
@@ -19,11 +17,21 @@ namespace OpenVDB.Tests
             LibraryDownloader.Clear();
         }
 
-        [Test]
-        public void ContextCreatePasses()
+        [SetUp]
+        public void SetUp()
         {
-            //var vdbFilePath = UnityEditor.PackageManager.Client.
-            // UnityEditor.AssetDatabase.ImportAsset();
+            OpenVDBAPI.oiInitialize();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            OpenVDBAPI.oiUninitialize();
+        }
+        [Test]
+        public void ImportVDBAssetPasses()
+        {
+            AssetDatabase.ImportAsset(Const.VDBSampleFilePath);
         }
     }
 }

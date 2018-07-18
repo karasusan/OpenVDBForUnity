@@ -91,11 +91,20 @@ namespace OpenVDB
         {
             foreach(var info in Infos)
             {
+                // Delete arch(x86 or x86_64) directory.
                 var path = Path.Combine(Application.dataPath, string.Format(LibraryDestFolder, info.arch));
                 if(Directory.Exists(path))
                 {
                     Directory.Delete(path, true);
                 }
+
+                // Delete meta file.
+                path = path + ".meta";
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+
             }
         }
 
