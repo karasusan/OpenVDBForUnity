@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.IO;
 
-namespace OpenVDB
+namespace OpenVDB.PackageBuild
 {
     public static class UnityCloudBuildTrigger
     {

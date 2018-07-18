@@ -4,5 +4,7 @@
     {
         public const string VDBSampleFilePath = "Packages/jp.kazuki.openvdb-samplemodels/OpenVDBSampleModels/bunny.vdb";
 
+        public const string AssetTempPath = "Assets/temp";
+
     }
 }

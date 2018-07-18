@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace OpenVDB
+namespace OpenVDB.PackageBuild
 {
     public class PackageBuildInfo
     {

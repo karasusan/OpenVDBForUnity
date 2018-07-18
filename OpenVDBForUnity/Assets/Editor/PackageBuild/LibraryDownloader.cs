@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 
-namespace OpenVDB
+namespace OpenVDB.PackageBuild
 {
     class LibraryPackageInfo
     {

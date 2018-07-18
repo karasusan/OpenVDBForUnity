@@ -9,7 +9,7 @@ using Extensions;
 namespace OpenVDB
 {
     [ScriptedImporter(2, "vdb")]
-    public class AlembicImporter : ScriptedImporter
+    public class OpenVDBImporter : ScriptedImporter
     {
         [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
 

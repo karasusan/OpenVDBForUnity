@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using UnityEditor;
 using System.IO;
+using OpenVDB.PackageBuild;
 
 namespace OpenVDB.Tests
 {

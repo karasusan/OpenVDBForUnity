@@ -1,0 +1,12 @@
+{
+    "name": "jp.kazuki.OpenVDB.Editor",
+    "references": [
+        "jp.kazuki.OpenVDB"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
