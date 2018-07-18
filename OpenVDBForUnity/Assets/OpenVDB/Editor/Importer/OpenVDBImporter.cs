@@ -8,14 +8,14 @@ using Extensions;
 
 namespace OpenVDB
 {
-    [ScriptedImporter(2, "vdb")]
-    public class OpenVDBImporter : ScriptedImporter
+    [ScriptedImporter(1, "vdb")]
+    public class OpenVDBAssetImporter : ScriptedImporter
     {
         [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
 
         public static string MakeShortAssetPath(string assetPath)
         {
-            return Regex.Replace(assetPath, "^Assets", "");
+            return Regex.Replace(assetPath, "^Assets/", "");
         }
 
         public static string SourcePath(string assetPath)
