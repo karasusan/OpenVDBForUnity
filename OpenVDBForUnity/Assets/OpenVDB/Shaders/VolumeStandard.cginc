@@ -8,7 +8,7 @@
 #endif
 
 half4 _Color;
-sampler3D _Volume;
+uniform sampler3D _Volume;
 half _Intensity;
 half _Threshold;
 float _StepDistance;
@@ -54,6 +54,15 @@ float sample_volume(float3 uv)
     return tex3D(_Volume, uv).r;
 }
 
+float ComputeDepth(float4 clippos)
+{
+#if defined(SHADER_TARGET_GLSL) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)
+    return (clippos.z / clippos.w) * 0.5 + 0.5;
+#else
+    return clippos.z / clippos.w;
+#endif
+}
+
 struct appdata
 {
     float4 vertex : POSITION;
@@ -67,6 +76,12 @@ struct v2f
     float3 world : TEXCOORD1;
 };
 
+struct fragOutput 
+{
+    fixed4 color : SV_Target;
+    float depth : SV_Depth;
+};
+
 v2f vert(appdata v)
 {
   v2f o;
@@ -76,7 +91,7 @@ v2f vert(appdata v)
   return o;
 }
 
-fixed4 frag(v2f i) : SV_Target
+fragOutput frag(v2f i)
 {
     Ray ray;
     ray.origin = localize(i.world);
@@ -112,6 +127,8 @@ fixed4 frag(v2f i) : SV_Target
     float3 ds = ray.dir * stepDist;
 
     float3 p = start;
+    float3 depth = end;
+    bool depthtest = true;
 
     float dst = 0.0;
 
@@ -124,6 +141,12 @@ fixed4 frag(v2f i) : SV_Target
         dst = (1.0 - dst) * v + dst;
         p += ds;
 
+        if(v > 0.01 && depthtest)
+        {
+            depth = p;
+            depthtest = false;
+        }
+
         if(iter >= stepCount)
         {
             break;
@@ -135,7 +158,12 @@ fixed4 frag(v2f i) : SV_Target
         }
     }
 
-    return saturate(dst) * _Color;
+    float3 world_depth = mul(unity_ObjectToWorld, depth).xyz;
+
+    fragOutput o;
+    o.color = saturate(dst) * _Color;
+    o.depth = ComputeDepth(mul(UNITY_MATRIX_VP, float4(world_depth, 1.0)));
+    return o;
 }
 
 #endif 

@@ -22,7 +22,7 @@
         {
             CGPROGRAM
 
-      #define ITERATIONS 100
+            #define ITERATIONS 100
             #include "./VolumeStandard.cginc"
             #pragma vertex vert
             #pragma fragment frag
