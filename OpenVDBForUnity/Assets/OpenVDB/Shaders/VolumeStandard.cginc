@@ -105,7 +105,7 @@ fixed4 frag(v2f i) : SV_Target
     float stepDist = _StepDistance * stepDistRatio;
     float startOffset = fmod(cameraDist, stepDist);
 
-    float3 start = ray.origin - ray.dir * startOffset;
+    float3 start = ray.origin + ray.dir * (stepDist - startOffset);
     float3 end = ray.origin + ray.dir * tfar;
     float dist = abs(tfar - tnear);
     half stepCount = dist / stepDist;
