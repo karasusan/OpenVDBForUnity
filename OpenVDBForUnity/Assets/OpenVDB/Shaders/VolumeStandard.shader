@@ -6,8 +6,7 @@
         _Volume ("Volume", 3D) = "" {}
         _Intensity ("Intensity", Range(1.0, 5.0)) = 1.2
         _Threshold ("Threshold", Range(0.0, 1.0)) = 0.95
-        _SliceMin ("Slice min", Vector) = (0.0, 0.0, 0.0, -1.0)
-        _SliceMax ("Slice max", Vector) = (1.0, 1.0, 1.0, -1.0)
+        _MaxStep ("MaxStep", Range(1, 128)) = 64
     }
 
     CGINCLUDE
