@@ -11,7 +11,7 @@ half4 _Color;
 sampler3D _Volume;
 half _Intensity;
 half _Threshold;
-half _MaxStep;
+float _StepDistance;
 
 struct Ray 
 {
@@ -82,8 +82,15 @@ fixed4 frag(v2f i) : SV_Target
     ray.origin = localize(i.world);
 
     // world space direction to object space
-    float3 dir = normalize(i.world - _WorldSpaceCameraPos);
-    ray.dir = normalize(mul((float3x3) unity_WorldToObject, dir));
+    float3 cameraVec = i.world - _WorldSpaceCameraPos;
+    float cameraDist = length(cameraVec);
+    float3 cameraDir = normalize(cameraVec);
+
+    float3 cameraForward = -UNITY_MATRIX_V[2].xyz;
+    float stepDistRatio = 1.0 / dot(cameraDir, cameraForward);
+
+
+    ray.dir = normalize(mul((float3x3) unity_WorldToObject, cameraDir));
 
     AABB aabb;
     aabb.min = float3(-0.5, -0.5, -0.5);
@@ -95,11 +102,14 @@ fixed4 frag(v2f i) : SV_Target
 
     tnear = max(0.0, tnear);
 
-    float3 start = ray.origin;
+    float stepDist = _StepDistance * stepDistRatio;
+    float startOffset = fmod(cameraDist, stepDist);
+
+    float3 start = ray.origin - ray.dir * startOffset;
     float3 end = ray.origin + ray.dir * tfar;
     float dist = abs(tfar - tnear);
-    float step_size = dist / float(_MaxStep);
-    float3 ds = normalize(end - start) * step_size;
+    half stepCount = dist / stepDist;
+    float3 ds = ray.dir * stepDist;
 
     float3 p = start;
 
@@ -109,12 +119,12 @@ fixed4 frag(v2f i) : SV_Target
     for (int iter = 0; iter < ITERATIONS; iter++)
     {
         float3 uv = get_uv(p);
-        float v = sample_volume(uv) * step_size * _Intensity;
+        float v = sample_volume(uv) * stepDist * _Intensity;
 
         dst = (1.0 - dst) * v + dst;
         p += ds;
 
-        if(iter >= _MaxStep)
+        if(iter >= stepCount)
         {
             break;
         }

@@ -4,9 +4,9 @@
     {
         _Color ("Color", Color) = (1, 1, 1, 1)
         _Volume ("Volume", 3D) = "" {}
-        _Intensity ("Intensity", Range(1.0, 5.0)) = 1.2
+        _Intensity ("Intensity", Range(0.0, 100.0)) = 1.2
         _Threshold ("Threshold", Range(0.0, 1.0)) = 0.95
-        _MaxStep ("MaxStep", Range(1, 128)) = 64
+        _StepDistance ("StepDistance", Range(0.01, 0.1)) = 0.02
     }
 
     CGINCLUDE
