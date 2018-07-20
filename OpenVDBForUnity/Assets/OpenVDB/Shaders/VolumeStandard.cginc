@@ -101,8 +101,9 @@ fixed4 frag(v2f i) : SV_Target
     float step_size = dist / float(_MaxStep);
     float3 ds = normalize(end - start) * step_size;
 
-    float4 dst = float4(0, 0, 0, 0);
     float3 p = start;
+
+    float dst = 0.0;
 
     [unroll]
     for (int iter = 0; iter < ITERATIONS; iter++)
@@ -110,11 +111,7 @@ fixed4 frag(v2f i) : SV_Target
         float3 uv = get_uv(p);
         float v = sample_volume(uv, p) * _Intensity;
 
-        float4 src = float4(v, v, v, v);
-        src.rgb *= src.a;
-
-        // blend
-        dst = (1.0 - dst.a) * src + dst;
+        dst = (1.0 - dst) * v + dst;
         p += ds;
 
         if(iter >= _MaxStep)
@@ -122,7 +119,7 @@ fixed4 frag(v2f i) : SV_Target
             break;
         }
 
-        if (dst.a > _Threshold)
+        if (dst > _Threshold)
         {
             break;
         }
