@@ -49,7 +49,7 @@ float3 get_uv(float3 p)
     return (p + 0.5);
 }
 
-float sample_volume(float3 uv, float3 p)
+float sample_volume(float3 uv)
 {
     return tex3D(_Volume, uv).r;
 }
@@ -109,7 +109,7 @@ fixed4 frag(v2f i) : SV_Target
     for (int iter = 0; iter < ITERATIONS; iter++)
     {
         float3 uv = get_uv(p);
-        float v = sample_volume(uv, p) * _Intensity;
+        float v = sample_volume(uv) * step_size * _Intensity;
 
         dst = (1.0 - dst) * v + dst;
         p += ds;
