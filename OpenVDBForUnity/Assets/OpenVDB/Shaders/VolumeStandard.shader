@@ -7,6 +7,8 @@
         _Intensity ("Intensity", Range(0.0, 100.0)) = 1.2
         _Threshold ("Threshold", Range(0.0, 1.0)) = 0.95
         _StepDistance ("StepDistance", Range(0.01, 0.1)) = 0.02
+        _ShadowSteps ("ShadowSteps", Range(1, 32)) = 16
+        _ShadowDensity ("ShadowDensity", Range(1, 10)) = 5
     }
 
     CGINCLUDE

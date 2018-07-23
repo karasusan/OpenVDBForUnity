@@ -11,6 +11,8 @@ half4 _Color;
 uniform sampler3D _Volume;
 half _Intensity;
 half _Threshold;
+half _ShadowSteps;
+float _ShadowDensity;
 float _StepDistance;
 
 struct Ray 
@@ -126,42 +128,74 @@ fragOutput frag(v2f i)
     half stepCount = dist / stepDist;
     float3 ds = ray.dir * stepDist;
 
+    // shadow parameter
+    // directional light
+    float shadowstepsize = 1.0 / (float)_ShadowSteps;
+    float3 lightVec = _WorldSpaceLightPos0.xyz  * shadowstepsize;
+    float shadowDensity = _ShadowDensity * shadowstepsize;
+
+
     float3 p = start;
     float3 depth = end;
     bool depthtest = true;
 
-    float dst = 0.0;
+    float curdensity = 0.0;
+    float transmittance = 1;
+    float3 lightenergy = 0;
 
     [unroll]
     for (int iter = 0; iter < ITERATIONS; iter++)
     {
+        // sampling voxel
         float3 uv = get_uv(p);
-        float v = sample_volume(uv) * stepDist * _Intensity;
+        float cursample = sample_volume(uv);
 
-        dst = (1.0 - dst) * v + dst;
-        p += ds;
-
-        if(v > 0.01 && depthtest)
+        if(cursample > 0.01)
         {
-            depth = p;
-            depthtest = false;
+            float3 lpos = p;
+            float shadowdist = 0;
+
+            //dst = (1.0 - dst) * v + dst;
+            if(depthtest)
+            {
+                depth = p;
+                depthtest = false;
+            }
+
+            [loop]
+            for (int s = 0; s < _ShadowSteps; s++)
+            {
+                lpos += lightVec;
+                float lsample = sample_volume(uv);
+                shadowdist += lsample;
+            }
+            curdensity = saturate(cursample * _Intensity);
+            float shadowterm = exp(-shadowdist * _ShadowDensity);
+            float3 absorbedlight = shadowterm * curdensity;
+            //lightenergy += absorbedlight * transmittance;
+            lightenergy += absorbedlight;
+            transmittance *= 1-curdensity;
         }
+        p += ds;
 
         if(iter >= stepCount)
         {
             break;
         }
 
+        /*
         if (dst > _Threshold)
         {
             break;
         }
+        */
     }
 
     float3 world_depth = mul(unity_ObjectToWorld, depth).xyz;
 
     fragOutput o;
-    o.color = saturate(dst) * _Color;
+    //o.color = float4( lightenergy, transmittance);
+    o.color = float4( float3(1,1,1)-lightenergy, 1-transmittance);
     o.depth = ComputeDepth(mul(UNITY_MATRIX_VP, float4(world_depth, 1.0)));
     return o;
 }
