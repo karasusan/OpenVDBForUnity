@@ -7,11 +7,11 @@
 #define ITERATIONS 100
 #endif
 
-half3 _Color;
+half3 _AmbientColor;
 uniform sampler3D _Volume;
 half _Intensity;
 half _ShadowSteps;
-float _ShadowDensity;
+half3 _ShadowDensity;
 float _StepDistance;
 float _AmbientDensity;
 
@@ -132,10 +132,10 @@ fragOutput frag(v2f i)
     // directional light
     float shadowstepsize = 1.0 / (float)_ShadowSteps;
     float3 lightVec = normalize(mul((float3x3) unity_WorldToObject, _WorldSpaceLightPos0.xyz))  * shadowstepsize;
-    float shadowDensity = _ShadowDensity * shadowstepsize;
+    float3 shadowDensity = 1.0 / _ShadowDensity * shadowstepsize;
 
     // threshold for shadow density
-    float shadowthreshold = -log(0.001) / shadowDensity;
+    float shadowthreshold = -log(0.001) / length(shadowDensity);
 
     float3 p = start;
     float3 depth = end;
@@ -182,7 +182,7 @@ fragOutput frag(v2f i)
                 }
             }
             curdensity = saturate(cursample * _Intensity);
-            float shadowterm = exp(-shadowdist * shadowDensity);
+            float3 shadowterm = exp(-shadowdist * shadowDensity);
             float3 absorbedlight = shadowterm * curdensity;
             lightenergy += absorbedlight * transmittance;
             transmittance *= 1-curdensity;
@@ -196,7 +196,7 @@ fragOutput frag(v2f i)
             shadowdist += sample_volume(saturate(luv));
             luv = uv + float3(0,0,0.2);
             shadowdist += sample_volume(saturate(luv));
-            lightenergy += exp(-shadowdist * _AmbientDensity) * curdensity * _Color * transmittance;
+            lightenergy += exp(-shadowdist * _AmbientDensity) * curdensity * _AmbientColor * transmittance;
             // sky ambient lighting
         }
         p += ds;
