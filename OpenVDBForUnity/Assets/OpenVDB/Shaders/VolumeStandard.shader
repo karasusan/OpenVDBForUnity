@@ -15,15 +15,19 @@
 
     ENDCG
 
-    SubShader {
+    SubShader 
+    {
+        Tags
+        {
+            "RenderType"="Transparent"
+            "Queue"="Transparent"
+        }
+
         Cull Back
         Blend SrcAlpha OneMinusSrcAlpha
-        // ZTest Always
 
         Pass
         {
-            //Tags{"LightMode" = "ForwardBase"}
-
             CGPROGRAM
 
             #define ITERATIONS 100
