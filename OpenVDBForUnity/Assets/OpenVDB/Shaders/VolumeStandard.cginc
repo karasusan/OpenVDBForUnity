@@ -133,6 +133,8 @@ fragOutput frag(v2f i)
     float3 lightVec = normalize(mul((float3x3) unity_WorldToObject, _WorldSpaceLightPos0.xyz))  * shadowstepsize;
     float shadowDensity = _ShadowDensity * shadowstepsize;
 
+    // threshold for shadow density
+    float shadowthreshold = -log(0.001) / shadowDensity;
 
     float3 p = start;
     float3 depth = end;
@@ -166,7 +168,17 @@ fragOutput frag(v2f i)
                 lpos += lightVec;
                 float3 luv = get_uv(lpos);
                 float lsample = sample_volume(saturate(luv));
+
+                float3 shadowboxtest = floor( 0.5 + ( abs( 0.5 - luv ) ) );
+                float exitshadowbox = shadowboxtest .x + shadowboxtest .y + shadowboxtest .z;
+
                 shadowdist += lsample;
+
+                // check to exit shadow box
+                if(shadowdist > shadowthreshold || exitshadowbox >= 1)
+                {
+                    break;
+                }
             }
             curdensity = saturate(cursample * _Intensity);
             float shadowterm = exp(-shadowdist * shadowDensity);
