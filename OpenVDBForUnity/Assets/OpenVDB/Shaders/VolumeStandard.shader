@@ -7,7 +7,8 @@
         _Intensity ("Intensity", Range(0.1, 2.0)) = 1
         _StepDistance ("StepDistance", Range(0.01, 0.1)) = 0.02
         _ShadowSteps ("ShadowSteps", Range(1, 64)) = 16
-        _ShadowDensity ("ShadowDensity", Range(1, 10)) = 5
+        _ShadowDensity ("ShadowDensity", Range(1, 50)) = 10
+        _AmbientDensity ("AmbientDensity", Range(0, 1)) = 0.7
     }
 
     CGINCLUDE

@@ -7,12 +7,13 @@
 #define ITERATIONS 100
 #endif
 
-half4 _Color;
+half3 _Color;
 uniform sampler3D _Volume;
 half _Intensity;
 half _ShadowSteps;
 float _ShadowDensity;
 float _StepDistance;
+float _AmbientDensity;
 
 struct Ray 
 {
@@ -185,6 +186,18 @@ fragOutput frag(v2f i)
             float3 absorbedlight = shadowterm * curdensity;
             lightenergy += absorbedlight * transmittance;
             transmittance *= 1-curdensity;
+
+            // sky ambient lighting
+            shadowdist = 0;
+
+            float3 luv = uv + float3(0,0,0.05);
+            shadowdist = sample_volume(saturate(luv));
+            luv = uv + float3(0,0,0.1);
+            shadowdist += sample_volume(saturate(luv));
+            luv = uv + float3(0,0,0.2);
+            shadowdist += sample_volume(saturate(luv));
+            lightenergy += exp(-shadowdist * _AmbientDensity) * curdensity * _Color * transmittance;
+            // sky ambient lighting
         }
         p += ds;
 
