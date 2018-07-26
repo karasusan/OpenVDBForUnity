@@ -23,10 +23,11 @@ git submodule init
 git submodule update
 ```
 
-Next, you need to download final release version plugin from bintray.  **Menu** ->  
+Next, you need to download the final release version plugin from package repository on [Bintray](https://bintray.com/kazuki/conan/OpenVDBNativePlugin%3Akazuki).  **Menu** ->  **Packages** -> **OpenVDB** -> **Download Library**
 
+![img](https://github.com/karasusan/OpenVDBForUnity/wiki/images/PackageInstall.png)
 
 ## Build
 
-Under Construction Wiki page.
+Under Construction [Wiki page](https://github.com/karasusan/OpenVDBForUnity/wiki/How-to-build-native-plugin).
 
