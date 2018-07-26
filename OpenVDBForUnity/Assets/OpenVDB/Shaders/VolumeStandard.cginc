@@ -2,6 +2,7 @@
 #define __VOLUME_RENDERING_INCLUDED__
 
 #include "UnityCG.cginc"
+#include "camera.cginc"
 
 #ifndef ITERATIONS
 #define ITERATIONS 100
@@ -27,18 +28,14 @@ struct AABB
     float3 max;
 };
 
-bool intersect(Ray r, AABB aabb, out float t0, out float t1)
+float intersect(Ray r, AABB aabb)
 {
   float3 invR = 1.0 / r.dir;
   float3 tbot = invR * (aabb.min - r.origin);
   float3 ttop = invR * (aabb.max - r.origin);
-  float3 tmin = min(ttop, tbot);
   float3 tmax = max(ttop, tbot);
-  float2 t = max(tmin.xx, tmin.yz);
-  t0 = max(t.x, t.y);
-  t = min(tmax.xx, tmax.yz);
-  t1 = min(t.x, t.y);
-  return t0 <= t1;
+  float2 t = min(tmax.xx, tmax.yz);
+  return min(t.x, t.y);
 }
 
 float3 localize(float3 p) 
@@ -76,6 +73,7 @@ struct v2f
     float4 vertex : SV_POSITION;
     float2 uv : TEXCOORD0;
     float3 world : TEXCOORD1;
+    float4 screenPos : TEXCOORD2;
 };
 
 struct fragOutput 
@@ -88,6 +86,7 @@ v2f vert(appdata v)
 {
   v2f o;
   o.vertex = UnityObjectToClipPos(v.vertex);
+  o.screenPos = o.vertex;
   o.uv = v.uv;
   o.world = mul(unity_ObjectToWorld, v.vertex).xyz;
   return o;
@@ -98,33 +97,27 @@ fragOutput frag(v2f i)
     Ray ray;
     ray.origin = localize(i.world);
 
-    // world space direction to object space
-    float3 cameraVec = i.world - _WorldSpaceCameraPos;
-    float cameraDist = length(cameraVec);
-    float3 cameraDir = normalize(cameraVec);
-
-    float3 cameraForward = -UNITY_MATRIX_V[2].xyz;
-    float stepDistRatio = 1.0 / dot(cameraDir, cameraForward);
-
-
+    float3 cameraDir = GetCameraDirection(i.screenPos);
     ray.dir = normalize(mul((float3x3) unity_WorldToObject, cameraDir));
 
     AABB aabb;
     aabb.min = float3(-0.5, -0.5, -0.5);
     aabb.max = float3(0.5, 0.5, 0.5);
 
-    float tnear;
-    float tfar;
-    intersect(ray, aabb, tnear, tfar);
+    float tfar = intersect(ray, aabb);
 
-    tnear = max(0.0, tnear);
+    // calculate start offset
+    float3 cameraForward = GetCameraForward();
+    float stepDistRatio = 1.0 / dot(cameraDir, cameraForward);
 
+    float cameraDist = length(i.world - GetCameraPosition());
     float stepDist = _StepDistance * stepDistRatio;
     float startOffset = fmod(cameraDist, stepDist);
 
+    // sampling parameter (start, end, stepcount)
     float3 start = ray.origin + ray.dir * (stepDist - startOffset);
     float3 end = ray.origin + ray.dir * tfar;
-    float dist = abs(tfar - tnear);
+    float dist = length(end - start);
     half stepCount = dist / stepDist;
     float3 ds = ray.dir * stepDist;
 

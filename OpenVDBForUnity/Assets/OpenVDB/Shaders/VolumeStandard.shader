@@ -9,6 +9,7 @@
         _ShadowDensity ("ShadowDensity", Color) = (1, 1, 1, 1)
         _AmbientColor ("AmbientColor", Color) = (1, 1, 1, 1)
         _AmbientDensity ("AmbientDensity", Range(0, 1)) = 0.7
+        [KeywordEnum(Off, Front, Back)] _Cull("Culling", Int) = 2
     }
 
     CGINCLUDE
@@ -23,7 +24,7 @@
             "Queue"="Transparent"
         }
 
-        Cull Back
+        Cull [_Cull]
         Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
