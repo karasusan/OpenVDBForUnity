@@ -28,6 +28,11 @@ struct AABB
     float3 max;
 };
 
+bool IsInnerCube(float3 pos)
+{
+    return all(max(0.5 - abs(pos), 0.0));
+}
+
 float Intersect(Ray r, AABB aabb)
 {
   float3 invR = 1.0 / r.dir;
@@ -100,6 +105,14 @@ fragOutput frag(v2f i)
     float3 cameraDir = GetCameraDirection(i.screenPos);
     ray.dir = normalize(mul((float3x3) unity_WorldToObject, cameraDir));
 
+    float3 cameraPos = GetCameraPosition();
+    float3 nearCameraPos = cameraPos + (GetCameraNearClip() + 0.01) * cameraDir;
+    nearCameraPos = Localize(nearCameraPos);
+    if(IsInnerCube(nearCameraPos))
+    {
+        ray.origin = nearCameraPos;
+    }
+
     AABB aabb;
     aabb.min = float3(-0.5, -0.5, -0.5);
     aabb.max = float3(0.5, 0.5, 0.5);
@@ -110,7 +123,7 @@ fragOutput frag(v2f i)
     float3 cameraForward = GetCameraForward();
     float stepDistRatio = 1.0 / dot(cameraDir, cameraForward);
 
-    float cameraDist = length(i.world - GetCameraPosition());
+    float cameraDist = length(i.world - cameraPos);
     float stepDist = _StepDistance * stepDistRatio;
     float startOffset = fmod(cameraDist, stepDist);
 
