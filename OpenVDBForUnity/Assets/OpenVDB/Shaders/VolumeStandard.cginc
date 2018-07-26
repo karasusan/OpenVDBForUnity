@@ -28,7 +28,7 @@ struct AABB
     float3 max;
 };
 
-float intersect(Ray r, AABB aabb)
+float Intersect(Ray r, AABB aabb)
 {
   float3 invR = 1.0 / r.dir;
   float3 tbot = invR * (aabb.min - r.origin);
@@ -38,20 +38,20 @@ float intersect(Ray r, AABB aabb)
   return min(t.x, t.y);
 }
 
-float3 localize(float3 p) 
+float3 Localize(float3 p) 
 {
     return mul(unity_WorldToObject, float4(p, 1)).xyz;
 }
 
-float3 get_uv(float3 p) 
+float3 GetUV(float3 p) 
 {
     return (p + 0.5);
 }
 
-float sample_volume(float3 uv)
+float SampleVolume(float3 uv)
 {
     return tex3D(_Volume, uv).r;
-}
+}   
 
 float ComputeDepth(float4 clippos)
 {
@@ -95,7 +95,7 @@ v2f vert(appdata v)
 fragOutput frag(v2f i)
 {
     Ray ray;
-    ray.origin = localize(i.world);
+    ray.origin = Localize(i.world);
 
     float3 cameraDir = GetCameraDirection(i.screenPos);
     ray.dir = normalize(mul((float3x3) unity_WorldToObject, cameraDir));
@@ -104,7 +104,7 @@ fragOutput frag(v2f i)
     aabb.min = float3(-0.5, -0.5, -0.5);
     aabb.max = float3(0.5, 0.5, 0.5);
 
-    float tfar = intersect(ray, aabb);
+    float tfar = Intersect(ray, aabb);
 
     // calculate start offset
     float3 cameraForward = GetCameraForward();
@@ -142,8 +142,8 @@ fragOutput frag(v2f i)
     for (int iter = 0; iter < ITERATIONS; iter++)
     {
         // sampling voxel
-        float3 uv = get_uv(p);
-        float cursample = sample_volume(uv);
+        float3 uv = GetUV(p);
+        float cursample = SampleVolume(uv);
 
         if(cursample > 0.01)
         {
@@ -160,8 +160,8 @@ fragOutput frag(v2f i)
             for (int s = 0; s < _ShadowSteps; s++)
             {
                 lpos += lightVec;
-                float3 luv = get_uv(lpos);
-                float lsample = sample_volume(saturate(luv));
+                float3 luv = GetUV(lpos);
+                float lsample = SampleVolume(saturate(luv));
 
                 float3 shadowboxtest = floor( 0.5 + ( abs( 0.5 - luv ) ) );
                 float exitshadowbox = shadowboxtest .x + shadowboxtest .y + shadowboxtest .z;
@@ -184,11 +184,11 @@ fragOutput frag(v2f i)
             shadowdist = 0;
 
             float3 luv = uv + float3(0,0,0.05);
-            shadowdist = sample_volume(saturate(luv));
+            shadowdist = SampleVolume(saturate(luv));
             luv = uv + float3(0,0,0.1);
-            shadowdist += sample_volume(saturate(luv));
+            shadowdist += SampleVolume(saturate(luv));
             luv = uv + float3(0,0,0.2);
-            shadowdist += sample_volume(saturate(luv));
+            shadowdist += SampleVolume(saturate(luv));
             lightenergy += exp(-shadowdist * _AmbientDensity) * curdensity * _AmbientColor * transmittance;
             // sky ambient lighting
         }
