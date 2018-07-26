@@ -27,6 +27,8 @@
         Cull [_Cull]
         Blend SrcAlpha OneMinusSrcAlpha
 
+        ZWrite Off
+
         Pass
         {
             CGPROGRAM
