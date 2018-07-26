@@ -1,5 +1,7 @@
 # OpenVDBForUnity
 
+Unity plugins for [OpenVDB](http://www.openvdb.org/).
+
 ## Build Status
 
 | Bintray | Windows | Linux & Mac | 
@@ -8,5 +10,23 @@
 
 ![gif](https://github.com/karasusan/OpenVDBForUnity/wiki/images/CloudSample.gif)
 
-Unity plugins for [OpenVDB](http://www.openvdb.org/).
+## Requirements
+
+- Unity 2018.2 or later
+
+## How to Use 
+
+First, this project depends on some submodules. Check these commands below to checkout submodules.
+
+```
+git submodule init
+git submodule update
+```
+
+Next, you need to download final release version plugin from bintray.  **Menu** ->  
+
+
+## Build
+
+Under Construction Wiki page.
 
