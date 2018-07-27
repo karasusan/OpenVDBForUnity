@@ -72,17 +72,21 @@ namespace OpenVDB.PackageBuild
 
                 Debug.LogFormat("Extract Succeed {0}", extractPath);
 
-                // Copy library file to project folder
-                var src = Path.Combine(extractPath, "lib");
-                var dest = Path.Combine(Application.dataPath, string.Format(LibraryDestFolder, info.arch));
-                if(!Directory.Exists(dest))
+                // Copy library files to project folder
+                var folderNames = new string[] { "lib", "bin" };
+                foreach(var folderName in folderNames)
                 {
-                    Directory.CreateDirectory(dest);
-                }
-                Debug.LogFormat("Copy file {0}, Destination Directory {1}", src, dest);
-                var paths = CopyFiles(src, dest);
+                    var src = Path.Combine(extractPath, "lib");
+                    var dest = Path.Combine(Application.dataPath, string.Format(LibraryDestFolder, info.arch));
+                    if (!Directory.Exists(dest))
+                    {
+                        Directory.CreateDirectory(dest);
+                    }
+                    Debug.LogFormat("Copy file {0}, Destination Directory {1}", src, dest);
+                    var paths = CopyFiles(src, dest);
 
-                UpdatePluginImporterSettings(paths.Select(_ => MakeShortAssetPath(_)).ToArray(), info.target);
+                    UpdatePluginImporterSettings(paths.Select(_ => MakeShortAssetPath(_)).ToArray(), info.target);
+                }
             }
             return true;
         }
