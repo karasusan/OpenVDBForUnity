@@ -53,7 +53,8 @@ namespace OpenVDB
 
             using (var vdbStream = new OpenVDBStream(go, streamDescriptor))
             {
-                vdbStream.Load();
+                if (!vdbStream.Load())
+                    return;
 
                 var subassets = new Subassets(ctx);
                 subassets.Add(streamDescriptor.name, streamDescriptor);

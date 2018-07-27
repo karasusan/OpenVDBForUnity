@@ -33,7 +33,7 @@ namespace OpenVDB
             OpenVDBStream.s_streams.Remove(this);
         }
 
-        public void Load()
+        public bool Load()
         {
             if(!s_initialized)
             {
@@ -41,7 +41,8 @@ namespace OpenVDB
                 s_initialized = true;
             }
             var context = oiContext.Create(m_go.GetInstanceID());
-            var loaded = context.Load(Path.Combine(Application.streamingAssetsPath, m_streamDesc.pathToVDB));
+            var path = Path.Combine(Application.streamingAssetsPath, m_streamDesc.pathToVDB);
+            var loaded = context.Load(path);
             if(loaded)
             {
                 UpdateVDB(context);
@@ -49,8 +50,10 @@ namespace OpenVDB
             }
             else
             {
-                Debug.LogError("failed to load openvdb at " + Application.streamingAssetsPath + m_streamDesc.pathToVDB);
+                Debug.LogError("failed to load openvdb at " + path);
+                return false;
             }
+            return true;
         }
 
         void UpdateVDB(oiContext context)
