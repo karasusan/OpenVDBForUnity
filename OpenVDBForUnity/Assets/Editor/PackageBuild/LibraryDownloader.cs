@@ -76,7 +76,10 @@ namespace OpenVDB.PackageBuild
                 var folderNames = new string[] { "lib", "bin" };
                 foreach(var folderName in folderNames)
                 {
-                    var src = Path.Combine(extractPath, "lib");
+                    var src = Path.Combine(extractPath, folderName);
+                    if (!Directory.Exists(src))
+                        continue;
+                    
                     var dest = Path.Combine(Application.dataPath, string.Format(LibraryDestFolder, info.arch));
                     if (!Directory.Exists(dest))
                     {
