@@ -34,5 +34,5 @@ Finally, select your OpenVDB file (file extension is **.vdb**) in the project wi
 
 ## Build
 
-Under Construction [Wiki page](https://github.com/karasusan/OpenVDBForUnity/wiki/How-to-build-native-plugin).
+Under Construction [Wiki page](https://github.com/karasusan/OpenVDBForUnity/wiki/How-to-build-the-native-plugin).
 
