@@ -1,3 +1,6 @@
 [submodule "OpenVDBForUnity/Packages/jp.kazuki.openvdb-samplemodels"]
 	path = OpenVDBForUnity/Packages/jp.kazuki.openvdb-samplemodels
 	url = https://github.com/karasusan/OpenVDBSampleModels.git
+[submodule "OpenVDBForUnity/Packages/jp.kazuki.sharpziplib"]
+	path = OpenVDBForUnity/Packages/jp.kazuki.sharpziplib
+	url = https://github.com/karasusan/UPM.SharpZipLib
