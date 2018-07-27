@@ -23,9 +23,14 @@ git submodule init
 git submodule update
 ```
 
-Next, you need to download the final release version plugin from package repository on [Bintray](https://bintray.com/kazuki/conan/OpenVDBNativePlugin%3Akazuki).  **Menu** ->  **Packages** -> **OpenVDB** -> **Download Library**
+Next, you need to download the final release version plugin from the package repository on [Bintray](https://bintray.com/kazuki/conan/OpenVDBNativePlugin%3Akazuki).  You can download from the menu bar.
+( **Packages** -> **OpenVDB** -> **Download Library** )
 
 ![img](https://github.com/karasusan/OpenVDBForUnity/wiki/images/PackageInstall.png)
+
+Finally, select your OpenVDB file (file extension is **.vdb**) in the project window and reimport from the cotext menu.
+
+![img](https://github.com/karasusan/OpenVDBForUnity/wiki/images/ImportVDBFile.png)
 
 ## Build
 
