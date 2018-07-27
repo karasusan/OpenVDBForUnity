@@ -46,5 +46,6 @@ class OpenVDBNativePluginConan(ConanFile):
     def package(self):
         self.copy("LICENSE", dst="license", src="src")
         self.copy("*", dst="lib", src="lib")
+        self.copy("*", dst="bin", src="bin")
         self.copy("openvdbi.h", dst="include", src="src/Plugin/openvdbi")
         self.copy("OpenVDBImporter.h", dst="include/Importer", src="src/Plugin/openvdbi/Importer")
