@@ -27,17 +27,28 @@
         Cull [_Cull]
         Blend SrcAlpha OneMinusSrcAlpha
 
-        ZWrite Off
 
         Pass
         {
-            CGPROGRAM
+            ZWrite Off
 
-            #define ITERATIONS 100
+            CGPROGRAM
             #include "./VolumeStandard.cginc"
             #pragma vertex vert
             #pragma fragment frag
+            ENDCG
+        }
 
+        Pass
+        {
+            Tags{ "LightMode" = "ShadowCaster" }
+            ZWrite On ZTest LEqual
+
+            CGPROGRAM
+            #include "./VolumeShadowCaster.cginc"
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_shadowcaster
             ENDCG
         }
     }

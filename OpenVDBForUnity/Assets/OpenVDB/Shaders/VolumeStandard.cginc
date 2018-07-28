@@ -1,8 +1,9 @@
-﻿#ifndef __VOLUME_RENDERING_INCLUDED__
-#define __VOLUME_RENDERING_INCLUDED__
+﻿#ifndef __VOLUME_STANDARD_INCLUDED__
+#define __VOLUME_STANDARD_INCLUDED__
 
 #include "UnityCG.cginc"
-#include "camera.cginc"
+#include "Camera.cginc"
+#include "Utils.cginc"
 
 #ifndef ITERATIONS
 #define ITERATIONS 100
@@ -16,47 +17,10 @@ half3 _ShadowDensity;
 float _StepDistance;
 float _AmbientDensity;
 
-struct Ray 
-{
-    float3 origin;
-    float3 dir;
-};
-
-struct AABB 
-{
-    float3 min;
-    float3 max;
-};
-
-bool IsInnerCube(float3 pos)
-{
-    return all(max(0.5 - abs(pos), 0.0));
-}
-
-float Intersect(Ray r, AABB aabb)
-{
-  float3 invR = 1.0 / r.dir;
-  float3 tbot = invR * (aabb.min - r.origin);
-  float3 ttop = invR * (aabb.max - r.origin);
-  float3 tmax = max(ttop, tbot);
-  float2 t = min(tmax.xx, tmax.yz);
-  return min(t.x, t.y);
-}
-
-float3 Localize(float3 p) 
-{
-    return mul(unity_WorldToObject, float4(p, 1)).xyz;
-}
-
-float3 GetUV(float3 p) 
-{
-    return (p + 0.5);
-}
-
 float SampleVolume(float3 uv)
 {
     return tex3D(_Volume, uv).r;
-}   
+}
 
 float ComputeDepth(float4 clippos)
 {
@@ -108,6 +72,8 @@ fragOutput frag(v2f i)
     float3 cameraPos = GetCameraPosition();
     float3 nearCameraPos = cameraPos + (GetCameraNearClip() + 0.01) * cameraDir;
     nearCameraPos = Localize(nearCameraPos);
+
+    // If camera inside volume cube, change the original position of the ray.
     if(IsInnerCube(nearCameraPos))
     {
         ray.origin = nearCameraPos;
@@ -151,7 +117,8 @@ fragOutput frag(v2f i)
     float transmittance = 1;
     float3 lightenergy = 0;
 
-    [unroll]
+    //[unroll]
+    [loop]
     for (int iter = 0; iter < ITERATIONS; iter++)
     {
         // sampling voxel
