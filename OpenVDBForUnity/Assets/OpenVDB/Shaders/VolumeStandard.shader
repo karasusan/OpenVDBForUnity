@@ -20,7 +20,6 @@
     {
         Tags
         {
-            "RenderType"="Transparent"
             "Queue"="Transparent"
         }
 
@@ -30,15 +29,23 @@
 
         Pass
         {
-            ZWrite Off
+            Tags
+            { 
+                "RenderPipeline" = "HDRenderPipeline" 
+                "RenderType"="Transparent"
+            }
+
+            ZWrite On
 
             CGPROGRAM
+
             #include "./VolumeStandard.cginc"
             #pragma vertex vert
             #pragma fragment frag
             ENDCG
         }
 
+        /*
         Pass
         {
             Tags{ "LightMode" = "ShadowCaster" }
@@ -51,5 +58,6 @@
             #pragma multi_compile_shadowcaster
             ENDCG
         }
+        */
     }
 }

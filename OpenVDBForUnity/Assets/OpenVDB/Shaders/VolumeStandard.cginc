@@ -47,18 +47,18 @@ struct v2f
 
 struct fragOutput 
 {
-    fixed4 color : SV_Target;
+    fixed4 color : SV_Target0;
     float depth : SV_Depth;
 };
 
 v2f vert(appdata v)
 {
-  v2f o;
-  o.vertex = UnityObjectToClipPos(v.vertex);
-  o.screenPos = o.vertex;
-  o.uv = v.uv;
-  o.world = mul(unity_ObjectToWorld, v.vertex).xyz;
-  return o;
+    v2f o;
+    o.vertex = UnityObjectToClipPos(v.vertex);
+    o.screenPos = o.vertex;
+    o.uv = v.uv;
+    o.world = mul(unity_ObjectToWorld, v.vertex).xyz;
+    return o;
 }
 
 fragOutput frag(v2f i)
@@ -189,11 +189,9 @@ fragOutput frag(v2f i)
         clip(-1);
     }
 
-    float3 world_depth = mul(unity_ObjectToWorld, depth).xyz;
-
     fragOutput o;
-    o.color = float4( lightenergy, 1-transmittance);
-    o.depth = ComputeDepth(mul(UNITY_MATRIX_VP, float4(world_depth, 1.0)));
+    o.color = float4(lightenergy, 1-transmittance);
+    o.depth = ComputeDepth(mul(UNITY_MATRIX_MVP, float4(depth, 1.0)));
     return o;
 }
 
