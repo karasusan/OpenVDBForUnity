@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using UnityEngine;
 using OpenVDB.PackageBuild;
 
@@ -65,6 +65,18 @@ namespace OpenVDB.Tests
             Assert.NotZero(summary.depth);
             Assert.NotZero(summary.format);
             Assert.NotZero(summary.voxelCount);
+            Object.DestroyImmediate(obj);
+        }
+
+        [Test]
+        public void ContextSetConfigPasses()
+        {
+            var obj = new GameObject();
+            var ctx = oiContext.Create(obj.GetInstanceID());
+            Assert.True(ctx.Load(Const.VDBSampleFilePath));
+
+            var conf = new oiConfig();
+            ctx.SetConfig(ref conf);
             Object.DestroyImmediate(obj);
         }
 
