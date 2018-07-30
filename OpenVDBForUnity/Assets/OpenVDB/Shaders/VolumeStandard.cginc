@@ -30,15 +30,6 @@ float SampleVolume(float3 uv)
     return tex3D(_Volume, uv).r;
 }
 
-float ComputeDepth(float4 clippos)
-{
-#if defined(SHADER_TARGET_GLSL) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)
-    return (clippos.z / clippos.w) * 0.5 + 0.5;
-#else
-    return clippos.z / clippos.w;
-#endif
-}
-
 struct appdata
 {
     float4 vertex : POSITION;
@@ -192,7 +183,6 @@ fragOutput frag(v2f i)
             shadowdist += SampleVolume(saturate(luv));
             lightenergy += exp(-shadowdist * _AmbientDensity) * curdensity * _AmbientColor * transmittance;
             #endif
-
         }
         p += ds;
 

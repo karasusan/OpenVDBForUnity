@@ -38,4 +38,13 @@ inline float3 GetUV(float3 p)
     return (p + 0.5);
 }
 
+inline float ComputeDepth(float4 clippos)
+{
+#if defined(SHADER_TARGET_GLSL) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)
+    return (clippos.z / clippos.w) * 0.5 + 0.5;
+#else
+    return clippos.z / clippos.w;
+#endif
+}
+
 #endif

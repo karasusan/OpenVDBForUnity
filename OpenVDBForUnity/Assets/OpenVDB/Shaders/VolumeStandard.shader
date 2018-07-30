@@ -26,7 +26,6 @@ Shader "OpenVDB/Standard"
         {
             "Queue"="Transparent"
         }
-
         Cull [_Cull]
         Blend SrcAlpha OneMinusSrcAlpha
 
@@ -49,17 +48,18 @@ Shader "OpenVDB/Standard"
             ENDCG
         }
 
+        // TODO:: Implement the ShadowCaster Pass for HDRP
         /*
         Pass
         {
             Tags{ "LightMode" = "ShadowCaster" }
-            ZWrite On ZTest LEqual
 
             CGPROGRAM
             #include "./VolumeShadowCaster.cginc"
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_shadowcaster
+            // #pragma fragmentoption ARB_precision_hint_fastest
             ENDCG
         }
         */
