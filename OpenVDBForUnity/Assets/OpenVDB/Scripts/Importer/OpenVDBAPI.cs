@@ -1,8 +1,20 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace OpenVDB
 {
+
+    public struct oiConfig
+    {
+        public float scaleFactor;
+
+        public void SetDefaults()
+        {
+            scaleFactor = 0.01f;
+        }
+    }
+
+
     public struct oiVolumeSummary
     {
         public int voxelCount;
@@ -24,12 +36,14 @@ namespace OpenVDB
 
         public static oiContext Create(int uid) { return oiContextCreate(uid); }
         public bool Load(string path) { return oiContextLoad(self, path); }
+        public void SetConfig(ref oiConfig conf) { oiContextSetConfig(self, ref conf); }
         public void Destroy() { oiContextDestroy(self); self = IntPtr.Zero; }
         public oiVolume volume { get { return oiContextGetVolume(self); } }
 
         #region internal
         [DllImport("openvdbi")] static extern oiContext oiContextCreate(int uid);
         [DllImport("openvdbi")] static extern Bool oiContextLoad(IntPtr ctx, string path);
+        [DllImport("openvdbi")] static extern void oiContextSetConfig(IntPtr ctx, ref oiConfig conf);
         [DllImport("openvdbi")] static extern void oiContextDestroy(IntPtr ctx);
         [DllImport("openvdbi")] static extern oiVolume oiContextGetVolume(IntPtr ctx);
         #endregion

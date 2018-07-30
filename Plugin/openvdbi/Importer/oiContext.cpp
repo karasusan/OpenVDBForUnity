@@ -158,6 +158,11 @@ bool oiContext::load(const char *in_path)
     return true;
 }
 
+void oiContext::setConfig(const oiConfig *config)
+{
+    m_config = config;
+}
+
 oiVolume* oiContext::getVolume() const
 {
     return m_volume;

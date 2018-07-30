@@ -3,6 +3,11 @@
 class oiContext;
 class oiVolume;
 
+struct oiConfig
+{
+    float scale_factor = 1.0f;
+};
+
 struct oiVolumeSummary
 {
     int voxel_count = 0;
@@ -34,6 +39,7 @@ openvdbiAPI void oiInitialize();
 openvdbiAPI void oiUninitialize();
 
 openvdbiAPI oiContext* oiContextCreate(int uid);
+openvdbiAPI void oiContextSetConfig(oiContext* ctx, const oiConfig* config);
 openvdbiAPI void oiContextDestroy(oiContext* ctx);
 openvdbiAPI bool oiContextLoad(oiContext* ctx, const char *path);
 openvdbiAPI oiVolume* oiContextGetVolume(oiContext* ctx);

@@ -1,6 +1,7 @@
 #pragma once
 
 class oiVolume;
+class oiConfig;
 
 class oiContext
 {
@@ -9,6 +10,7 @@ public:
     ~oiContext();
 
     bool load(const char *path);
+    void setConfig(const oiConfig* config);
     const std::string& getPath() const;
 
     oiVolume* getVolume() const;
@@ -25,6 +27,7 @@ private:
     openvdb::Coord m_extents = {256, 256, 256};
 
     oiVolume* m_volume;
+    const oiConfig* m_config;
 };
 
 class oiContextManager

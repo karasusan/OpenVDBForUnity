@@ -19,6 +19,12 @@ openvdbiAPI oiContext* oiContextCreate(int uid)
     return oiContextManager::getContext(uid);
 }
 
+openvdbiAPI void oiContextSetConfig(oiContext* ctx, const oiConfig* config)
+{
+    if(ctx)
+        ctx->setConfig(config);
+}
+
 openvdbiAPI void oiContextDestroy(oiContext* ctx)
 {
 	if (ctx)
