@@ -1,4 +1,4 @@
-﻿#ifndef _CAMERA_H_
+#ifndef _CAMERA_H_
 #define _CAMERA_H_
 
 // thanks https://github.com/hecomi/uRaymarching
