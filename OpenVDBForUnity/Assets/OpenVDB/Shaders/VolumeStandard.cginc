@@ -9,13 +9,21 @@
 #define ITERATIONS 100
 #endif
 
-half3 _AmbientColor;
 uniform sampler3D _Volume;
+
+#ifdef ENABLE_TRACE_DISTANCE_LIMITED
+uniform sampler2D _CameraDepthTexture;
+#endif
+
 half _Intensity;
 half _ShadowSteps;
 half3 _ShadowDensity;
 float _StepDistance;
+
+#ifdef ENABLE_AMBIENT_LIGHT
+half3 _AmbientColor;
 float _AmbientDensity;
+#endif
 
 float SampleVolume(float3 uv)
 {
@@ -43,6 +51,7 @@ struct v2f
     float2 uv : TEXCOORD0;
     float3 world : TEXCOORD1;
     float4 screenPos : TEXCOORD2;
+    float4 screenPos2 : TEXCOORD3;
 };
 
 struct fragOutput 
@@ -56,6 +65,7 @@ v2f vert(appdata v)
     v2f o;
     o.vertex = UnityObjectToClipPos(v.vertex);
     o.screenPos = o.vertex;
+    o.screenPos2 = ComputeScreenPos(o.vertex);
     o.uv = v.uv;
     o.world = mul(unity_ObjectToWorld, v.vertex).xyz;
     return o;
@@ -96,6 +106,16 @@ fragOutput frag(v2f i)
     // sampling parameter (start, end, stepcount)
     float3 start = ray.origin + ray.dir * (stepDist - startOffset);
     float3 end = ray.origin + ray.dir * tfar;
+
+    #ifdef ENABLE_TRACE_DISTANCE_LIMITED
+    //Get the distance to the camera from the depth buffer for this point
+    float2 uv = i.screenPos2.xy / i.screenPos2.w;
+    float sceneDepth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
+    float tfar2 = length(ray.origin - Localize(sceneDepth * cameraDir + cameraPos));
+
+    end = ray.origin + ray.dir * min(tfar, tfar2);
+    #endif
+
     float dist = length(end - start);
     half stepCount = dist / stepDist;
     float3 ds = ray.dir * stepDist;
@@ -136,6 +156,7 @@ fragOutput frag(v2f i)
                 depthtest = false;
             }
 
+            #ifdef ENABLE_DIRECTIONAL_LIGHT
             [loop]
             for (int s = 0; s < _ShadowSteps; s++)
             {
@@ -143,10 +164,10 @@ fragOutput frag(v2f i)
                 float3 luv = GetUV(lpos);
                 float lsample = SampleVolume(saturate(luv));
 
+                shadowdist += lsample;
+
                 float3 shadowboxtest = floor( 0.5 + ( abs( 0.5 - luv ) ) );
                 float exitshadowbox = shadowboxtest .x + shadowboxtest .y + shadowboxtest .z;
-
-                shadowdist += lsample;
 
                 // check to exit shadow box
                 if(shadowdist > shadowthreshold || exitshadowbox >= 1)
@@ -154,13 +175,15 @@ fragOutput frag(v2f i)
                     break;
                 }
             }
+            #endif
+
             curdensity = saturate(cursample * _Intensity);
             float3 shadowterm = exp(-shadowdist * shadowDensity);
             float3 absorbedlight = shadowterm * curdensity;
             lightenergy += absorbedlight * transmittance;
             transmittance *= 1-curdensity;
 
-            // sky ambient lighting
+            #ifdef ENABLE_AMBIENT_LIGHT
             shadowdist = 0;
 
             float3 luv = uv + float3(0,0,0.05);
@@ -170,7 +193,8 @@ fragOutput frag(v2f i)
             luv = uv + float3(0,0,0.2);
             shadowdist += SampleVolume(saturate(luv));
             lightenergy += exp(-shadowdist * _AmbientDensity) * curdensity * _AmbientColor * transmittance;
-            // sky ambient lighting
+            #endif
+
         }
         p += ds;
 
@@ -191,7 +215,7 @@ fragOutput frag(v2f i)
 
     fragOutput o;
     o.color = float4(lightenergy, 1-transmittance);
-    o.depth = ComputeDepth(mul(UNITY_MATRIX_MVP, float4(depth, 1.0)));
+    o.depth = ComputeDepth(UnityObjectToClipPos(float4(depth, 1.0)));
     return o;
 }
 

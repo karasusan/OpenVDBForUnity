@@ -1,4 +1,4 @@
-﻿Shader "OpenVDB/Standard"
+Shader "OpenVDB/Standard"
 {
     Properties
     {
@@ -14,9 +14,13 @@
 
     CGINCLUDE
 
+    #define ENABLE_TRACE_DISTANCE_LIMITED
+    #define ENABLE_DIRECTIONAL_LIGHT
+    #define ENABLE_AMBIENT_LIGHT
+
     ENDCG
 
-    SubShader 
+    SubShader
     {
         Tags
         {
@@ -30,8 +34,8 @@
         Pass
         {
             Tags
-            { 
-                "RenderPipeline" = "HDRenderPipeline" 
+            {
+                "RenderPipeline" = "HDRenderPipeline"
                 "RenderType"="Transparent"
             }
 
