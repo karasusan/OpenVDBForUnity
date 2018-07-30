@@ -42,16 +42,14 @@ float ComputeDepth(float4 clippos)
 struct appdata
 {
     float4 vertex : POSITION;
-    float2 uv : TEXCOORD0;
 };
 
 struct v2f
 {
     float4 vertex : SV_POSITION;
-    float2 uv : TEXCOORD0;
     float3 world : TEXCOORD1;
-    float4 screenPos : TEXCOORD2;
-    float4 screenPos2 : TEXCOORD3;
+    float4 pos : TEXCOORD2;
+    float4 screenPos : TEXCOORD3;
 };
 
 struct fragOutput 
@@ -64,9 +62,8 @@ v2f vert(appdata v)
 {
     v2f o;
     o.vertex = UnityObjectToClipPos(v.vertex);
-    o.screenPos = o.vertex;
-    o.screenPos2 = ComputeScreenPos(o.vertex);
-    o.uv = v.uv;
+    o.pos = o.vertex;
+    o.screenPos = ComputeScreenPos(o.vertex);
     o.world = mul(unity_ObjectToWorld, v.vertex).xyz;
     return o;
 }
@@ -76,9 +73,10 @@ fragOutput frag(v2f i)
     Ray ray;
     ray.origin = Localize(i.world);
 
-    float3 cameraDir = GetCameraDirection(i.screenPos);
+    float3 cameraDir = GetCameraDirection(i.pos);
     ray.dir = normalize(mul((float3x3) unity_WorldToObject, cameraDir));
 
+    // get near camera position in object space
     float3 cameraPos = GetCameraPosition();
     float3 nearCameraPos = cameraPos + (GetCameraNearClip() + 0.01) * cameraDir;
     nearCameraPos = Localize(nearCameraPos);
@@ -109,10 +107,10 @@ fragOutput frag(v2f i)
 
     #ifdef ENABLE_TRACE_DISTANCE_LIMITED
     //Get the distance to the camera from the depth buffer for this point
-    float2 uv = i.screenPos2.xy / i.screenPos2.w;
+    float2 uv = i.screenPos.xy / i.screenPos.w;
     float sceneDepth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
-    float tfar2 = length(ray.origin - Localize(sceneDepth * cameraDir + cameraPos));
 
+    float tfar2 = length(ray.origin - Localize(sceneDepth * cameraDir + cameraPos));
     end = ray.origin + ray.dir * min(tfar, tfar2);
     #endif
 
