@@ -169,7 +169,7 @@ bool sampleGrid(
 }
 
 oiVolume::oiVolume(const openvdb::FloatGrid& grid, const openvdb::Coord& extents)
-    : m_grid(grid), m_extents(extents), m_scaleFactor(1.0f)
+    : m_grid(grid), m_extents(extents)
 {
     grid.print();
 
