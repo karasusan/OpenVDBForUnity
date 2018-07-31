@@ -158,10 +158,10 @@ bool oiContext::load(const char *in_path)
     return true;
 }
 
-void oiContext::setConfig(const oiConfig *config)
+void oiContext::setConfig(const oiConfig& config)
 {
     m_config = config;
-    m_volume->setScaleFactor(m_config->scale_factor);
+    m_volume->setScaleFactor(m_config.scale_factor);
 }
 
 oiVolume* oiContext::getVolume() const
