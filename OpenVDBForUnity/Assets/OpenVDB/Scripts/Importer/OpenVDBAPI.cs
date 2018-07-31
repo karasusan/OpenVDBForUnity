@@ -22,6 +22,11 @@ namespace OpenVDB
         public int height;
         public int depth;
         public int format;
+        public float minValue;
+        public float maxValue;
+        public float xscale;
+        public float yscale;
+        public float zscale;
     }
 
     public struct oiVolumeData

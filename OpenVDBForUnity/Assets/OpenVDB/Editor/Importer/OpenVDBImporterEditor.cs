@@ -7,7 +7,7 @@ using UnityEditor.Experimental.AssetImporters;
 
 namespace OpenVDB
 {
-    [CustomEditor(typeof(OpenVDBAssetImporter)), CanEditMultipleObjects]
+    [CustomEditor(typeof(OpenVDBImporter)), CanEditMultipleObjects]
     public class OpenVDBImporterEditor : ScriptedImporterEditor
     {
         public override void OnInspectorGUI()
@@ -17,8 +17,12 @@ namespace OpenVDB
             EditorGUILayout.LabelField("Scene", EditorStyles.boldLabel);
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(serializedObject.FindProperty(pathSettings + "scaleFactor"),
-                    new GUIContent("Scale Factor", "How much to scale the models compared to what is in the source file."));
+                var property = serializedObject.FindProperty(pathSettings + "scaleFactor");
+                if(property != null)
+                {
+                    EditorGUILayout.PropertyField(property,
+                        new GUIContent("Scale Factor", "How much to scale the models compared to what is in the source file."));
+                }
             }
             EditorGUILayout.Separator();
 

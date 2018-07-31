@@ -1,4 +1,4 @@
-﻿#if UNITY_2017_1_OR_NEWER
+#if UNITY_2017_1_OR_NEWER
 
 using UnityEngine;
 using System.IO;
@@ -9,7 +9,7 @@ using Extensions;
 namespace OpenVDB
 {
     [ScriptedImporter(1, "vdb")]
-    public class OpenVDBAssetImporter : ScriptedImporter
+    public class OpenVDBImporter : ScriptedImporter
     {
         [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
 
@@ -20,7 +20,7 @@ namespace OpenVDB
 
         public static string SourcePath(string assetPath)
         {
-            if(assetPath.StartsWith("Packages", System.StringComparison.Ordinal))
+            if (assetPath.StartsWith("Packages", System.StringComparison.Ordinal))
             {
                 return Path.Combine(Path.GetDirectoryName(Application.dataPath), assetPath);
             }
@@ -111,7 +111,7 @@ namespace OpenVDB
         void CollectSubAssets(Subassets subassets, OpenVDBStream stream)
         {
             var go = stream.gameObject;
-            if(stream.texture3D != null)
+            if (stream.texture3D != null)
             {
                 stream.texture3D.name = go.name;
                 subassets.Add(stream.texture3D.name, stream.texture3D);
