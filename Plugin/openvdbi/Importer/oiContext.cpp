@@ -155,13 +155,13 @@ bool oiContext::load(const char *in_path)
     m_grid = openvdb::gridConstPtrCast<openvdb::FloatGrid>(allGrids[0]);
 
     m_volume = new oiVolume(*m_grid, m_extents);
+    m_volume->setScaleFactor(m_config.scale_factor);
     return true;
 }
 
 void oiContext::setConfig(const oiConfig& config)
 {
     m_config = config;
-    m_volume->setScaleFactor(m_config.scale_factor);
 }
 
 oiVolume* oiContext::getVolume() const
