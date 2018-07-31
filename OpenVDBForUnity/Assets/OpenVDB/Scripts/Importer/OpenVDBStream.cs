@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,11 +41,18 @@ namespace OpenVDB
                 s_initialized = true;
             }
             var context = oiContext.Create(m_go.GetInstanceID());
+            var settings = m_streamDesc.settings;
+
+            oiConfig config = new oiConfig();
+            config.SetDefaults();
+            config.scaleFactor = settings.scaleFactor;
+
+            context.SetConfig(ref config);
             var path = Path.Combine(Application.streamingAssetsPath, m_streamDesc.pathToVDB);
             var loaded = context.Load(path);
             if(loaded)
             {
-                UpdateVDB(context);
+                UpdateVDB(context, config);
                 OpenVDBStream.s_streams.Add(this);
             }
             else
@@ -56,9 +63,9 @@ namespace OpenVDB
             return true;
         }
 
-        void UpdateVDB(oiContext context)
+        void UpdateVDB(oiContext context, oiConfig config)
         {
-            m_volume = new OpenVDBVolume(context.volume);
+            m_volume = new OpenVDBVolume(context.volume, config);
             if(m_volume != null)
             {
                 m_volume.SyncDataBegin();

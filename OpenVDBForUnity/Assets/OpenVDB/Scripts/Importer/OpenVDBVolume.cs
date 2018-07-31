@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace OpenVDB
@@ -9,16 +9,17 @@ namespace OpenVDB
         Mesh m_mesh;
 
         oiVolume m_volume;
+        oiConfig m_config;
         oiVolumeSummary m_summary;
 
         public Texture3D texture3D { get { return m_texture3D; } }
 
         public Mesh mesh { get { return m_mesh; } }
 
-        public OpenVDBVolume(oiVolume volume)
+        public OpenVDBVolume(oiVolume volume, oiConfig config)
         {
             m_volume = volume;
-
+            m_config = config;
             m_volume.GetSummary(ref m_summary);
         }
 
@@ -35,7 +36,7 @@ namespace OpenVDB
                 m_mesh = null;
             }
 
-            // create 3d texture 
+            // create 3d texture
             var width = m_summary.width;
             var height = m_summary.height;
             var depth = m_summary.depth;
@@ -57,7 +58,11 @@ namespace OpenVDB
 
             // create mesh
             var position = Vector3.zero;
-            m_mesh = Voxelizer.VoxelMesh.Build(new []{position}, 1f);
+            var xsize = m_summary.width * m_config.scaleFactor;
+            var ysize = m_summary.height * m_config.scaleFactor;
+            var zsize = m_summary.depth * m_config.scaleFactor;
+            //m_mesh = Voxelizer.VoxelMesh.Build(new []{position}, xsize, ysize, zsize);
+            m_mesh = Voxelizer.VoxelMesh.Build(new[] { position }, 1f);
         }
 
         public void SyncDataEnd()
