@@ -11,6 +11,7 @@ public:
     virtual ~oiVolume();
 
     void reset();
+    void setScaleFactor(float scaleFactor);
     void fillTextureBuffer(oiVolumeData& data) const;
     const oiVolumeSummary& getSummary() const;
 
@@ -18,6 +19,7 @@ public:
     //RawVector<openvdbV4 > m_values;
 private:
     oiVolumeSummary* m_summary;
+    float m_scaleFactor;
     const openvdb::FloatGrid& m_grid;
     const openvdb::Coord& m_extents;
 };

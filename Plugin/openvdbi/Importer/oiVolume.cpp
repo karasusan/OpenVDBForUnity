@@ -169,13 +169,13 @@ bool sampleGrid(
 }
 
 oiVolume::oiVolume(const openvdb::FloatGrid& grid, const openvdb::Coord& extents)
-    : m_grid(grid), m_extents(extents)
+    : m_grid(grid), m_extents(extents), m_scaleFactor(1.0f)
 {
     grid.print();
 
     int voxel_count = extents.x() * extents.y() * extents.z();
     int texture_format = 20;
-    m_summary = new oiVolumeSummary(voxel_count, extents.x(), extents.y(), extents.z(), texture_format, 0, 0);
+    m_summary = new oiVolumeSummary(voxel_count, extents.x(), extents.y(), extents.z(), texture_format);
 }
 
 oiVolume::~oiVolume()
@@ -184,6 +184,11 @@ oiVolume::~oiVolume()
 
 void oiVolume::reset()
 {
+}
+
+void oiVolume::setScaleFactor(float scaleFactor)
+{
+    m_scaleFactor = scaleFactor;
 }
 
 void oiVolume::fillTextureBuffer(oiVolumeData& data) const
@@ -202,6 +207,9 @@ void oiVolume::fillTextureBuffer(oiVolumeData& data) const
     sampleGrid(m_grid, extents, value_range, (float*)data.voxels);
     m_summary->min_value = value_range.getMin();
     m_summary->max_value = value_range.getMax();
+    m_summary->x_scale = m_grid.voxelSize().x() * m_scaleFactor;
+    m_summary->y_scale = m_grid.voxelSize().y() * m_scaleFactor;
+    m_summary->z_scale = m_grid.voxelSize().z() * m_scaleFactor;
 
     DebugLog("min=%f, max=%f", value_range.getMin(), value_range.getMax());
 }

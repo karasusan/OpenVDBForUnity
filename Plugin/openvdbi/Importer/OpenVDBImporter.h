@@ -17,17 +17,18 @@ struct oiVolumeSummary
     int format = 0;
     float min_value = 0;
     float max_value = 0;
+    float x_scale = 0;
+    float y_scale = 0;
+    float z_scale = 0;
 
 
     oiVolumeSummary() {}
-    oiVolumeSummary(int c, int w, int h, int d, int f, float min, float max)
+    oiVolumeSummary(int c, int w, int h, int d, int f)
             : voxel_count(c),
               width(w),
               height(h),
               depth(d),
-              format(f),
-              min_value(min),
-              max_value(max) {}
+              format(f) {}
 };
 
 struct oiVolumeData

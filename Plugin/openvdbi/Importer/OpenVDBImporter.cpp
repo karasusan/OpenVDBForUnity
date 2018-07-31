@@ -22,7 +22,7 @@ openvdbiAPI oiContext* oiContextCreate(int uid)
 openvdbiAPI void oiContextSetConfig(oiContext* ctx, const oiConfig* config)
 {
     if(ctx)
-        ctx->setConfig(config);
+        ctx->setConfig(config); 
 }
 
 openvdbiAPI void oiContextDestroy(oiContext* ctx)
