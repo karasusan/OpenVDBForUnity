@@ -1,4 +1,4 @@
-﻿#ifndef __VOLUME_STANDARD_INCLUDED__
+#ifndef __VOLUME_STANDARD_INCLUDED__
 #define __VOLUME_STANDARD_INCLUDED__
 
 #include "UnityCG.cginc"
@@ -43,7 +43,7 @@ struct v2f
     float4 screenPos : TEXCOORD3;
 };
 
-struct fragOutput 
+struct fragOutput
 {
     fixed4 color : SV_Target0;
     float depth : SV_Depth;
@@ -207,4 +207,4 @@ fragOutput frag(v2f i)
     return o;
 }
 
-#endif 
+#endif

@@ -143,12 +143,15 @@ bool sampleGrid(
         const openvdb::FloatGrid& grid,
         const openvdb::Coord& sampling_extents,
         FloatRange& value_range,
+        openvdb::Vec3d& scale,
         RealType* out_data)
 {
     assert(out_data);
 
     const auto grid_bbox_is = getIndexSpaceBoundingBox(grid);
     const auto bbox_world = grid.transform().indexToWorld(grid_bbox_is);
+
+    scale = bbox_world.extents();
 
     // Return if the grid bbox is empty.
     if (grid_bbox_is.empty())
@@ -204,13 +207,20 @@ void oiVolume::fillTextureBuffer(oiVolumeData& data) const
     openvdb::Coord extents{m_summary->width, m_summary->height, m_summary->depth};
 
     FloatRange value_range;
-    sampleGrid(m_grid, extents, value_range, (float*)data.voxels);
+    openvdb::Vec3d scale;
+    sampleGrid(m_grid, extents, value_range, scale, (float*)data.voxels);
     m_summary->min_value = value_range.getMin();
     m_summary->max_value = value_range.getMax();
-    m_summary->x_scale = m_grid.voxelSize().x() * m_scaleFactor;
-    m_summary->y_scale = m_grid.voxelSize().y() * m_scaleFactor;
-    m_summary->z_scale = m_grid.voxelSize().z() * m_scaleFactor;
 
+    m_summary->x_scale = scale.x() * m_scaleFactor;
+    m_summary->y_scale = scale.y() * m_scaleFactor;
+    m_summary->z_scale = scale.z() * m_scaleFactor;
+
+    DebugLog("scale.x()=%f, scale.y()=%f, scale.z()=%f",
+             scale.x(),
+             scale.y(),
+             scale.z()
+    );
     DebugLog("min=%f, max=%f", value_range.getMin(), value_range.getMax());
 }
 

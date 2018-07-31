@@ -52,7 +52,7 @@ namespace OpenVDB
             var loaded = context.Load(path);
             if(loaded)
             {
-                UpdateVDB(context, config);
+                UpdateVDB(context);
                 OpenVDBStream.s_streams.Add(this);
             }
             else
@@ -63,14 +63,16 @@ namespace OpenVDB
             return true;
         }
 
-        void UpdateVDB(oiContext context, oiConfig config)
+        void UpdateVDB(oiContext context)
         {
-            m_volume = new OpenVDBVolume(context.volume, config);
+            m_volume = new OpenVDBVolume(context.volume);
             if(m_volume != null)
             {
                 m_volume.SyncDataBegin();
                 //m_volume.SyncDataEnd();
             }
+            // Apply volume scale
+            m_go.transform.localScale = m_volume.scale;
         }
     }
 }

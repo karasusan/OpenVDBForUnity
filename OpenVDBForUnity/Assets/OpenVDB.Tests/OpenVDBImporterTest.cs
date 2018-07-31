@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System.IO;
 using UnityEditor;
 using OpenVDB.PackageBuild;
@@ -32,10 +32,11 @@ namespace OpenVDB.Tests
         }
 
         // Unknown Error on Unity Cloud Build.
-        // 
-        // Unhandled log message: '[Error] Platform Mac OS X 10.12.6 with device OpenGLCore is not supported, no rendering will occur'. Use UnityEngine.TestTools.LogAssert.Expect
-        // UnityEditor.AssetDatabase:ImportAsset(String) OpenVDB.Tests.OpenVDBImporterTest:ImportVDBAssetPasses() (at Assets/OpenVDB.Tests/OpenVDBImporterTest.cs:37) 
         //
+        // Unhandled log message: '[Error] Platform Mac OS X 10.12.6 with device OpenGLCore is not supported, no rendering will occur'. Use UnityEngine.TestTools.LogAssert.Expect
+        // UnityEditor.AssetDatabase:ImportAsset(String) OpenVDB.Tests.OpenVDBImporterTest:ImportVDBAssetPasses() (at Assets/OpenVDB.Tests/OpenVDBImporterTest.cs:37)
+        //
+        /*
         [Test, Ignore("This test cannot pass on Unity Cloud Build (Local Build is no problem)")]
         public void ImportVDBAssetPasses()
         {
@@ -59,5 +60,6 @@ namespace OpenVDB.Tests
             Assert.NotNull(importer.streamSettings);
             Assert.NotZero(importer.streamSettings.scaleFactor);
         }
+        */
     }
 }

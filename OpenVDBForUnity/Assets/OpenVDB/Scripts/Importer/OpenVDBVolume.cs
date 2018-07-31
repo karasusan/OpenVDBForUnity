@@ -9,17 +9,20 @@ namespace OpenVDB
         Mesh m_mesh;
 
         oiVolume m_volume;
-        oiConfig m_config;
         oiVolumeSummary m_summary;
 
         public Texture3D texture3D { get { return m_texture3D; } }
 
         public Mesh mesh { get { return m_mesh; } }
 
-        public OpenVDBVolume(oiVolume volume, oiConfig config)
+        public Vector3 scale
+        {
+            get { return new Vector3(m_summary.xscale, m_summary.yscale, m_summary.zscale); }
+        }
+
+        public OpenVDBVolume(oiVolume volume)
         {
             m_volume = volume;
-            m_config = config;
             m_volume.GetSummary(ref m_summary);
         }
 
@@ -52,16 +55,15 @@ namespace OpenVDB
             // kick async copy
             m_volume.FillData(ref volumeData);
 
+            // update volume data summary
+            m_volume.GetSummary(ref m_summary);
+
             // copy buffer CPU to GPU
             m_texture3D.SetPixels(list.Array);
             m_texture3D.Apply();
 
-            // create mesh
+            // create mesh unit scaled cube
             var position = Vector3.zero;
-            var xsize = m_summary.width * m_config.scaleFactor;
-            var ysize = m_summary.height * m_config.scaleFactor;
-            var zsize = m_summary.depth * m_config.scaleFactor;
-            //m_mesh = Voxelizer.VoxelMesh.Build(new []{position}, xsize, ysize, zsize);
             m_mesh = Voxelizer.VoxelMesh.Build(new[] { position }, 1f);
         }
 
