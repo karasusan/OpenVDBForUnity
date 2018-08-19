@@ -7,6 +7,7 @@ Shader "OpenVDB/Standard"
         _StepDistance ("StepDistance", Range(0.01, 0.05)) = 0.01
         _ShadowSteps ("ShadowSteps", Range(1, 64)) = 32
         _ShadowDensity ("ShadowDensity", Color) = (0.4, 0.4, 0.4, 1)
+        _ShadowThreshold ("ShadowThreshold", Range(0.001, 0.1)) = 0.001
         _AmbientColor ("AmbientColor", Color) = (0.4, 0.4, 0.5, 1)
         _AmbientDensity ("AmbientDensity", Range(0, 1)) = 0.2
         [KeywordEnum(Off, Front, Back)] _Cull("Culling", Int) = 0

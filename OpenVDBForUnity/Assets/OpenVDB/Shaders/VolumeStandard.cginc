@@ -17,6 +17,7 @@ uniform sampler2D _CameraDepthTexture;
 
 half _Intensity;
 half _ShadowSteps;
+half _ShadowThreshold;
 half3 _ShadowDensity;
 float _StepDistance;
 
@@ -66,21 +67,20 @@ fragOutput frag(v2f i)
     float3 cameraDir = GetCameraDirection(i.pos);
     ray.dir = normalize(mul((float3x3) unity_WorldToObject, cameraDir));
 
-    // get near camera position in object space
+    float3 rayOriginWorld = i.world;
     float3 cameraPos = GetCameraPosition();
+
+    #ifdef ENABLE_CAMERA_INSIDE_CUBE
+    // get near camera position in object space
     float3 nearCameraPos = cameraPos + (GetCameraNearClip() + 0.01) * cameraDir;
     float3 nearCameraPosLocal = Localize(nearCameraPos);
 
     // If camera inside volume cube, change the original position of the ray.
-    float3 rayOriginWorld = float3(0,0,0);
     if(IsInnerCube(nearCameraPosLocal))
     {
         rayOriginWorld = nearCameraPos;
     }
-    else
-    {
-        rayOriginWorld = i.world;
-    }
+    #endif
     ray.origin = Localize(rayOriginWorld);
 
     AABB aabb;
@@ -125,7 +125,7 @@ fragOutput frag(v2f i)
     float3 shadowDensity = 1.0 / _ShadowDensity * shadowstepsize;
 
     // threshold for shadow density
-    float shadowthreshold = -log(0.001) / length(shadowDensity);
+    float shadowThreshold = -log(_ShadowThreshold) / length(shadowDensity);
 
     float3 p = start;
     float3 depth = end;
@@ -168,7 +168,7 @@ fragOutput frag(v2f i)
                 float exitshadowbox = shadowboxtest .x + shadowboxtest .y + shadowboxtest .z;
 
                 // check to exit shadow box
-                if(shadowdist > shadowthreshold || exitshadowbox >= 1)
+                if(shadowdist > shadowThreshold || exitshadowbox >= 1)
                 {
                     break;
                 }
@@ -185,7 +185,7 @@ fragOutput frag(v2f i)
             shadowdist = 0;
 
             float3 luv = uv + float3(0,0,0.05);
-            shadowdist = SampleVolume(saturate(luv));
+            shadowdist += SampleVolume(saturate(luv));
             luv = uv + float3(0,0,0.1);
             shadowdist += SampleVolume(saturate(luv));
             luv = uv + float3(0,0,0.2);
