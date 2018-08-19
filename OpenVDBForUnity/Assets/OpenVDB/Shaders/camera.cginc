@@ -32,5 +32,4 @@ inline float3 GetCameraDirection(float4 screenPos)
 
     return _GetCameraDirection(screenPos.xy);
 }
-
 #endif

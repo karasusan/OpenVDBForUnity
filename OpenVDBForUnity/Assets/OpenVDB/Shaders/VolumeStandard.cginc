@@ -62,7 +62,6 @@ v2f vert(appdata v)
 fragOutput frag(v2f i)
 {
     Ray ray;
-    ray.origin = Localize(i.world);
 
     float3 cameraDir = GetCameraDirection(i.pos);
     ray.dir = normalize(mul((float3x3) unity_WorldToObject, cameraDir));
@@ -70,13 +69,19 @@ fragOutput frag(v2f i)
     // get near camera position in object space
     float3 cameraPos = GetCameraPosition();
     float3 nearCameraPos = cameraPos + (GetCameraNearClip() + 0.01) * cameraDir;
-    nearCameraPos = Localize(nearCameraPos);
+    float3 nearCameraPosLocal = Localize(nearCameraPos);
 
     // If camera inside volume cube, change the original position of the ray.
-    if(IsInnerCube(nearCameraPos))
+    float3 rayOriginWorld = float3(0,0,0);
+    if(IsInnerCube(nearCameraPosLocal))
     {
-        ray.origin = nearCameraPos;
+        rayOriginWorld = nearCameraPos;
     }
+    else
+    {
+        rayOriginWorld = i.world;
+    }
+    ray.origin = Localize(rayOriginWorld);
 
     AABB aabb;
     aabb.min = float3(-0.5, -0.5, -0.5);
@@ -85,15 +90,19 @@ fragOutput frag(v2f i)
     float tfar = Intersect(ray, aabb);
 
     // calculate start offset
+    #ifdef ENABLE_SAMPLING_START_OFFSET
     float3 cameraForward = GetCameraForward();
-    float stepDistRatio = 1.0 / dot(cameraDir, cameraForward);
+    float stepDist = _StepDistance / dot(cameraDir, cameraForward);
 
-    float cameraDist = length(i.world - cameraPos);
-    float stepDist = _StepDistance * stepDistRatio;
-    float startOffset = fmod(cameraDist, stepDist);
+    float cameraDist = length(rayOriginWorld - cameraPos);
+    float startOffset = stepDist - fmod(cameraDist, stepDist);
+    float3 start = ray.origin + mul((float3x3) unity_WorldToObject, cameraDir * startOffset);
+    #else
+    float stepDist = _StepDistance;
+    float3 start = ray.origin;
+    #endif
 
     // sampling parameter (start, end, stepcount)
-    float3 start = ray.origin + ray.dir * (stepDist - startOffset);
     float3 end = ray.origin + ray.dir * tfar;
 
     #ifdef ENABLE_TRACE_DISTANCE_LIMITED
