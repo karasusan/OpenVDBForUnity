@@ -1,15 +1,18 @@
 #if UNITY_2017_1_OR_NEWER
 
+using System;
 using UnityEngine;
 using System.IO;
 using UnityEditor.Experimental.AssetImporters;
 using System.Text.RegularExpressions;
 using Extensions;
+using Object = UnityEngine.Object;
 
 namespace OpenVDB
 {
+    [Serializable]
     [ScriptedImporter(1, "vdb")]
-    public class OpenVDBAssetImporter : ScriptedImporter
+    public class OpenVDBImporter : ScriptedImporter
     {
         [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
 
