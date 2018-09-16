@@ -7,7 +7,7 @@ using UnityEditor.Experimental.AssetImporters;
 
 namespace OpenVDB
 {
-    [CustomEditor(typeof(OpenVDBAssetImporter)), CanEditMultipleObjects]
+    [CustomEditor(typeof(OpenVDBImporter)), CanEditMultipleObjects]
     public class OpenVDBImporterEditor : ScriptedImporterEditor
     {
         public override void OnInspectorGUI()
