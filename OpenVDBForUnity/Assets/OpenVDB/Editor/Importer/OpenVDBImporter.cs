@@ -3,9 +3,11 @@
 using System;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 using UnityEditor.Experimental.AssetImporters;
 using System.Text.RegularExpressions;
 using Extensions;
+using UnityEditor;
 using Object = UnityEngine.Object;
 
 namespace OpenVDB
@@ -16,12 +18,12 @@ namespace OpenVDB
     {
         [SerializeField] public OpenVDBStreamSettings streamSettings = new OpenVDBStreamSettings();
 
-        public static string MakeShortAssetPath(string assetPath)
+        private static string MakeShortAssetPath(string assetPath)
         {
             return Regex.Replace(assetPath, "^Assets/", "");
         }
 
-        public static string SourcePath(string assetPath)
+        private static string SourcePath(string assetPath)
         {
             if (assetPath.StartsWith("Packages", System.StringComparison.Ordinal))
             {
@@ -86,13 +88,13 @@ namespace OpenVDB
             {
                 get
                 {
-                    if (m_defaultMaterial == null)
+                    if (m_defaultMaterial != null) return m_defaultMaterial;
+                    m_defaultMaterial = new Material(Shader.Find("OpenVDB/Standard"))
                     {
-                        m_defaultMaterial = new Material(Shader.Find("OpenVDB/Standard"));
-                        m_defaultMaterial.hideFlags = HideFlags.NotEditable;
-                        m_defaultMaterial.name = "Default Material";
-                        Add("Default Material", m_defaultMaterial);
-                    }
+                        name = "Default Material",
+                        hideFlags = HideFlags.NotEditable,
+                    };
+                    Add("Default Material", m_defaultMaterial);
                     return m_defaultMaterial;
                 }
             }
@@ -106,19 +108,30 @@ namespace OpenVDB
             }
         }
 
-        void GenerateSubAssets(Subassets subassets, OpenVDBStream stream, OpenVDBStreamDescriptor streamDescr)
+        private void GenerateSubAssets(Subassets subassets, OpenVDBStream stream, OpenVDBStreamDescriptor descriptor)
         {
-            CollectSubAssets(subassets, stream);
+            CollectSubAssets(subassets, stream, descriptor);
         }
 
-        void CollectSubAssets(Subassets subassets, OpenVDBStream stream)
+        private void CollectSubAssets(Subassets subassets, OpenVDBStream stream, OpenVDBStreamDescriptor descriptor)
         {
             var go = stream.gameObject;
-            if (stream.texture3D != null)
+            Texture texture = null;
+            
+            if (descriptor.settings.extractTextures)
             {
-                stream.texture3D.name = go.name;
-                subassets.Add(stream.texture3D.name, stream.texture3D);
+                texture = descriptor.settings.textures.First();
+                AddRemap(new SourceAssetIdentifier(typeof(Texture), texture.name), texture);
             }
+            else
+            {
+                if (stream.texture3D != null)
+                {
+                    texture = stream.texture3D;
+                    subassets.Add(stream.texture3D.name, stream.texture3D);
+                }
+            }
+            
             var meshFilter = go.GetOrAddComponent<MeshFilter>();
             if (meshFilter != null)
             {
@@ -127,11 +140,23 @@ namespace OpenVDB
                 subassets.Add(meshFilter.sharedMesh.name, meshFilter.sharedMesh);
             }
             var renderer = go.GetOrAddComponent<MeshRenderer>();
-            if (renderer != null)
+            if (renderer == null) return;
+            if (!descriptor.settings.importMaterials) return;
+            if (descriptor.settings.extractMaterials)
+            {
+                var material = descriptor.settings.materials.First();
+                AddRemap(new SourceAssetIdentifier(typeof(Material), material.name), material);
+                renderer.sharedMaterial = material;
+            }
+            else
             {
                 renderer.sharedMaterial = subassets.defaultMaterial;
-                renderer.sharedMaterial.SetTexture("_Volume", stream.texture3D);
             }
+
+            if (texture == null) return;
+            renderer.sharedMaterial.SetTexture("_Volume", texture);
+            renderer.sharedMaterial.name = texture.name;
+
         }
     }
 }

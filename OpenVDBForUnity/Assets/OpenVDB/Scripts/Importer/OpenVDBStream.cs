@@ -13,24 +13,24 @@ namespace OpenVDB
         static List<OpenVDBStream> s_streams = new List<OpenVDBStream>();
         static bool s_initialized;
 
-        OpenVDBStreamDescriptor m_streamDesc;
-        GameObject m_go;
-        OpenVDBVolume m_volume;
+        private GameObject m_go;
+        private OpenVDBVolume m_volume;
+        private OpenVDBStreamDescriptor m_streamDescriptor { get; }
+        
 
-        public OpenVDBStreamDescriptor streamDescriptor { get { return m_streamDesc; } }
-        public GameObject gameObject { get { return m_go; } }
-        public Texture3D texture3D { get { return m_volume.texture3D; } }
-        public Mesh mesh { get { return m_volume.mesh; }}
+        public GameObject gameObject => m_go;
+        public Texture3D texture3D => m_volume.texture3D;
+        public Mesh mesh => m_volume.mesh;
 
-        public OpenVDBStream(GameObject go, OpenVDBStreamDescriptor streamDesc)
+        public OpenVDBStream(GameObject go, OpenVDBStreamDescriptor mStreamDesc)
         {
             m_go = go;
-            m_streamDesc = streamDesc;
+            m_streamDescriptor = mStreamDesc;
         }
 
         public void Dispose()
         {
-            OpenVDBStream.s_streams.Remove(this);
+            s_streams.Remove(this);
         }
 
         public bool Load()
@@ -41,19 +41,19 @@ namespace OpenVDB
                 s_initialized = true;
             }
             var context = oiContext.Create(m_go.GetInstanceID());
-            var settings = m_streamDesc.settings;
+            var settings = m_streamDescriptor.settings;
 
-            oiConfig config = new oiConfig();
+            var config = new oiConfig();
             config.SetDefaults();
             config.scaleFactor = settings.scaleFactor;
 
             context.SetConfig(ref config);
-            var path = Path.Combine(Application.streamingAssetsPath, m_streamDesc.pathToVDB);
+            var path = Path.Combine(Application.streamingAssetsPath, m_streamDescriptor.pathToVDB);
             var loaded = context.Load(path);
             if(loaded)
             {
                 UpdateVDB(context);
-                OpenVDBStream.s_streams.Add(this);
+                s_streams.Add(this);
             }
             else
             {
@@ -66,11 +66,9 @@ namespace OpenVDB
         void UpdateVDB(oiContext context)
         {
             m_volume = new OpenVDBVolume(context.volume);
-            if(m_volume != null)
-            {
-                m_volume.SyncDataBegin();
-                //m_volume.SyncDataEnd();
-            }
+            m_volume?.SyncDataBegin();
+            m_volume.texture3D.name = m_go.name;
+            //m_volume.SyncDataEnd();
             // Apply volume scale
             m_go.transform.localScale = m_volume.scale;
         }
