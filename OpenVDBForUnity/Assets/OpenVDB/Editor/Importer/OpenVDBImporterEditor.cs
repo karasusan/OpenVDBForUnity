@@ -44,7 +44,7 @@ namespace OpenVDB
             var projectPath = Path.GetDirectoryName(Application.dataPath) + Path.DirectorySeparatorChar;
 
             if(!path.StartsWith(projectPath))
-                throw new InvalidOperationException($"Invalid path:{path}");
+                throw new InvalidOperationException(string.Format("Invalid path:{0}", path));
             return path.Substring(projectPath.Length);
         }
 

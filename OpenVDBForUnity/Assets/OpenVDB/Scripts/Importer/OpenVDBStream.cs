@@ -15,12 +15,13 @@ namespace OpenVDB
 
         private GameObject m_go;
         private OpenVDBVolume m_volume;
-        private OpenVDBStreamDescriptor m_streamDescriptor { get; }
+        private OpenVDBStreamDescriptor m_streamDescriptor;
         
+        public GameObject gameObject { get { return m_go; } }
 
-        public GameObject gameObject => m_go;
-        public Texture3D texture3D => m_volume.texture3D;
-        public Mesh mesh => m_volume.mesh;
+        public Texture3D texture3D { get { return m_volume.texture3D; } }
+
+        public Mesh mesh { get { return m_volume.mesh; } } 
 
         public OpenVDBStream(GameObject go, OpenVDBStreamDescriptor mStreamDesc)
         {
@@ -66,9 +67,9 @@ namespace OpenVDB
         void UpdateVDB(oiContext context)
         {
             m_volume = new OpenVDBVolume(context.volume);
-            m_volume?.SyncDataBegin();
+            m_volume.SyncDataBegin();
             m_volume.texture3D.name = m_go.name;
-            //m_volume.SyncDataEnd();
+            
             // Apply volume scale
             m_go.transform.localScale = m_volume.scale;
         }
