@@ -41,7 +41,7 @@ namespace OpenVDB
 
         private static string GetRelativePathInProjectFolder(string path)
         {
-            var projectPath = Path.GetDirectoryName(Application.dataPath) + Path.DirectorySeparatorChar;
+            var projectPath = Path.GetDirectoryName(Application.dataPath) + "/";
 
             if(!path.StartsWith(projectPath))
                 throw new InvalidOperationException($"Invalid path:{path}");
