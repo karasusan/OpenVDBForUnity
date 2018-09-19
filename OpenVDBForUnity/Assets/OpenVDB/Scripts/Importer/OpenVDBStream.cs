@@ -15,7 +15,7 @@ namespace OpenVDB
 
         private GameObject m_go;
         private OpenVDBVolume m_volume;
-        private OpenVDBStreamDescriptor m_streamDescriptor { get; }
+        private OpenVDBStreamDescriptor m_streamDescriptor;
         
         public GameObject gameObject { get { return m_go; } }
 
