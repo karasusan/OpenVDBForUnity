@@ -47,6 +47,7 @@ namespace OpenVDB
             var config = new oiConfig();
             config.SetDefaults();
             config.scaleFactor = settings.scaleFactor;
+            config.textureMaxSize = settings.textureMaxSize;
 
             context.SetConfig(ref config);
             var path = Path.Combine(Application.streamingAssetsPath, m_streamDescriptor.pathToVDB);

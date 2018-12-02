@@ -153,7 +153,10 @@ bool oiContext::load(const char *in_path)
         return true;
     }
     m_grid = openvdb::gridConstPtrCast<openvdb::FloatGrid>(allGrids[0]);
-
+    if(m_config.max_texture_size != 0)
+    {
+        m_extents.reset(m_config.max_texture_size);
+    }
     m_volume = new oiVolume(*m_grid, m_extents);
     m_volume->setScaleFactor(m_config.scale_factor);
     return true;

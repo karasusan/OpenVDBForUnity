@@ -18,5 +18,7 @@ namespace OpenVDB
         [SerializeField] public Texture[] textures = new Texture[0];
         
         [SerializeField] public Material[] materials = new Material[0];
+
+        [SerializeField] public int textureMaxSize = 256;
     }
 }
