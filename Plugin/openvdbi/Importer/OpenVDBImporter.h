@@ -6,6 +6,7 @@ class oiVolume;
 struct oiConfig
 {
     float scale_factor = 1.0f;
+    int max_texture_size = 0;
 };
 
 struct oiVolumeSummary

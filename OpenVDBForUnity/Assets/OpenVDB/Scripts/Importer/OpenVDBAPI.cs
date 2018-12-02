@@ -7,10 +7,12 @@ namespace OpenVDB
     public struct oiConfig
     {
         public float scaleFactor;
+        public int textureMaxSize;
 
         public void SetDefaults()
         {
             scaleFactor = 0.01f;
+            textureMaxSize = 0;
         }
     }
 

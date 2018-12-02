@@ -89,6 +89,16 @@ namespace OpenVDB
                         var property = serializedObject.FindProperty(pathSettings + "extractTextures");
                         var disabled = property.boolValue;
                         EditorGUI.BeginDisabledGroup(disabled);
+                        
+                        // Max Texture Size
+                        {
+                            var property2 = serializedObject.FindProperty(pathSettings + "textureMaxSize");
+                            var textureMaxSize = property2.intValue;
+                            EditorGUILayout.BeginHorizontal();
+                            EditorGUILayout.PrefixLabel("Texture Max Size");
+                            property2.intValue = EditorGUILayout.IntField(textureMaxSize);
+                            EditorGUILayout.EndHorizontal();
+                        }
                         EditorGUILayout.BeginHorizontal();
                         EditorGUILayout.PrefixLabel("Textures");
                         if (GUILayout.Button("Extract Textures"))
